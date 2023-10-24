@@ -21,7 +21,7 @@ class HashTable : AbstractStorage<Key, Value> {
   bool Set(Key key, Value value) override;
   Value Get(Key key) override;
   bool Exists(Key key) override;
-//  bool Del(Key key) override;
+  bool Del(Key key) override;
 //  void Update() override;
 //  std::vector<std::string> Keys() override;
 //  void Rename(Key old_name, Key new_name) override;
@@ -43,7 +43,6 @@ class HashTable : AbstractStorage<Key, Value> {
   std::vector<bucket> buckets_{};
 
 };
-
 
 template<typename Key, typename Value>
 void HashTable<Key, Value>::print() {
