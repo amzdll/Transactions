@@ -2,6 +2,7 @@
 #define TRANSACTIONS_SRC_INCLUDE_HASH_TABLE_H_
 #include "iostream"
 
+#include "../utils/unsorted_map/include/unsorted_map.h"
 #include "abstract_storage.h"
 #include "info_school.h"
 
@@ -37,12 +38,13 @@ class HashTable : AbstractStorage<Key, Value> {
   size_t Hash(Key key);
 
  private:
+  s21::unsorted_map<Key, Value> hash_table;
+
   std::vector<bucket> buckets_{};
 
   size_t HashNumeric(Key key);
   size_t HashString(std::string key);
 };
-
 }  // namespace s21
 
 #endif  // TRANSACTIONS_SRC_INCLUDE_HASH_TABLE_H_

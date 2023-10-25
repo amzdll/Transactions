@@ -35,7 +35,6 @@ struct PersonalData {
            (coins == other.coins || other.coins == "-");
   }
 };
-
 }  // namespace s21
 
 #endif  // TRANSACTIONS_SRC_INCLUDE_INFO_SCHOOL_H_

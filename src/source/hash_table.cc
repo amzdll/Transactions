@@ -163,6 +163,7 @@ int main() {
   for (int i = 0; i < 10; ++i) {
     map[hs1.Hash(i)] = map[hs1.Hash((i))] + 1;
   }
+
   hs1.Set(1, 1);
   hs1.Set(2, 1);
   hs1.Set(3, 1);
