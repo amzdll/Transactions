@@ -17,9 +17,8 @@ class HashTable : AbstractStorage<Key, Value> {
   using bucket = std::list<std::pair<Key, Value>>;
 
   HashTable();
-//  ~HashTable();
-//
-  void print();
+  ~HashTable() = default;
+
   bool Set(Key key, Value value) override;
   Value Get(Key key) override;
   bool Exists(Key key) override;
@@ -30,6 +29,7 @@ class HashTable : AbstractStorage<Key, Value> {
 //  unsigned int TTL(Key key) override;
   std::vector<Key> Find(Value) override;
   std::vector<Value> ShowAll() override;
+
 //  int Upload(std::string file_path) override;
 //  int Export(std::string file_path) override;
 
@@ -42,17 +42,6 @@ class HashTable : AbstractStorage<Key, Value> {
   size_t HashNumeric(Key key);
   size_t HashString(std::string key);
 };
-
-template<typename Key, typename Value>
-void HashTable<Key, Value>::print() {
-  for (int i = 0; i < buckets_.size(); ++i) {
-    std::cout << "bucket - " << i << " {";
-    for (auto itr : buckets_[i]) {
-      std::cout << " " << itr.first << ":" << itr.second << " ";
-    }
-    std::cout << "}" << std::endl;
-  }
-}
 
 }  // namespace s21
 
