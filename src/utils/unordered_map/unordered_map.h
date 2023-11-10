@@ -14,10 +14,12 @@ class unordered_map {
   using reference = const value_type &;
   using const_reference = const value_type &;
   using size_type = std::size_t;
-  using bucket = std::list<value_type>;
-  using iterator = value_type *;
+  using bucket = std::list<value_type> *;
 
+  class iterator;
+  friend class iterator;
   // Constructors
+
   unordered_map();
 //  unordered_map(std::initializer_list<value_type> const &items);
 //  unordered_map(const unordered_map &m);
@@ -30,8 +32,8 @@ class unordered_map {
   iterator end() const;
 
 // Capacity
-  bool empty();
-  bool size();
+  bool empty() const;
+  bool size() const;
 
 // Modifiers
 //  void clear();
@@ -51,8 +53,11 @@ class unordered_map {
   std::vector<bucket> buckets_;
   size_type size_ = 0;
 
-  typename std::vector<bucket>::iterator begin_{};
-  typename std::vector<bucket>::iterator end_{};
+//  typename std::vector<bucket>::iterator begin_{};
+//  typename std::vector<bucket>::iterator end_{};
+
+  typename std::list<value_type>::iterator begin_{};
+  typename std::list<value_type>::iterator end_{};
 
   size_type hash(Key key);
   size_type hash_string(Key key);
@@ -60,6 +65,27 @@ class unordered_map {
   iterator find_key(const Key &key);
 };
 
-}  // namespace s21
+template<class Key, class Value>
+class unordered_map<Key, Value>::iterator {
+ public:
+  friend class unordered_map;
 
+  iterator() = default;
+  ~iterator() = default;
+
+  bool operator==(const iterator itr);
+  bool operator!=(const iterator itr);
+  iterator& operator=(const iterator itr);
+  iterator& operator++();
+
+
+ private:
+//  typename std::vector<bucket>::iterator vec_itr_ = {};
+  int bucket_index = 0;
+  typename std::list<value_type>::iterator bucket_itr = {};
+  typename std::vector<std::list<value_type> *>::iterator vec_itr = {};
+};
+
+
+}  // namespace s21
 #endif  // TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
