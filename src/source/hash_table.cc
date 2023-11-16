@@ -127,7 +127,7 @@ bool HashTable<Key, Value>::Rename(Key old_name, Key new_name) {
 
 template <class Key, class Value>
 size_t HashTable<Key, Value>::Hash(Key key) {
-  if constexpr (std::is_same_v<Key, std::string>) {
+  if constexpr (std::is_same<Key, std::string>::value) {
     return HashString(key);
   } else {
     return HashNumeric(key);
@@ -148,63 +148,63 @@ size_t HashTable<Key, Value>::HashString(std::string key) {
 
 }  // namespace s21
 
-int main() {
-  //  s21::HashTable<std::string , int> hs;
-  //  std::map<int, int> map;
-  //  for (int i = 0; i < 100; ++i) {
-  //    map[hs.Hash(std::to_string(i))] = map[hs.Hash(std::to_string(i))] + 1;
-  //  }
-
-  s21::HashTable<std::string, int> hs;
-  s21::HashTable<int, int> hs1;
-
-  std::map<int, int> map;
-  hs1.Hash(1);
-  for (int i = 0; i < 10; ++i) {
-    map[hs1.Hash(i)] = map[hs1.Hash((i))] + 1;
-  }
-
-  hs1.Set(1, 1);
-  hs1.Set(2, 1);
-  hs1.Set(3, 1);
-  hs1.Set(4, 1);
-  hs1.Set(5, 1);
-  hs1.Set(6, 1);
-  hs1.Set(7, 3);
-  hs1.Set(7, 3);
-  hs1.Set(8, 3);
-  hs1.Set(9, 12);
-  //  std::cout << hs1.Get(9);
-  hs1.Del(5);
-  hs1.Update(9, 31);
-  hs1.Rename(9, 52);
-  //  hs1.print();
-  s21::HashTable<int, s21::PersonalData> hs3;
-  hs3.Set(1, {"a", "a", "a", "a", "a"});
-  hs3.Set(2, {"a", "b", "b", "b", "b"});
-  hs3.Set(3, {"c", "c", "c", "c", "c"});
-  hs3.Update(3, {"-", "-", "hui", "-", "gvfd"});
-  auto z = hs3.ShowAll();
-  for (int i = 0; i < z.size(); ++i) {
-    std::cout << z[i].name << " ";
-    std::cout << z[i].surname << " ";
-    std::cout << z[i].year << " ";
-    std::cout << z[i].city << " ";
-    std::cout << z[i].coins << " ";
-    std::cout << std::endl;
-  }
-  auto k = hs1.Find(1);
-  for (int i = 0; i < k.size(); ++i) {
-    std::cout << k[i] << " ";
-  }
-  //  std::cout << std::endl;
-  //  auto v = hs1.ShowAll();
-  //  for (int i = 0; i < v.size(); ++i) {
-  //    std::cout << v[i] << std::endl;
-  //  }
-
-  //  for (auto itr : map) {
-  //    std::cout << itr.first << " : " << itr.second << std::endl;
-  //  }
-  //  std::cout << map.size();
-}
+//int main() {
+//  //  s21::HashTable<std::string , int> hs;
+//  //  std::map<int, int> map;
+//  //  for (int i = 0; i < 100; ++i) {
+//  //    map[hs.Hash(std::to_string(i))] = map[hs.Hash(std::to_string(i))] + 1;
+//  //  }
+//
+//  s21::HashTable<std::string, int> hs;
+//  s21::HashTable<int, int> hs1;
+//
+//  std::map<int, int> map;
+//  hs1.Hash(1);
+//  for (int i = 0; i < 10; ++i) {
+//    map[hs1.Hash(i)] = map[hs1.Hash((i))] + 1;
+//  }
+//
+//  hs1.Set(1, 1);
+//  hs1.Set(2, 1);
+//  hs1.Set(3, 1);
+//  hs1.Set(4, 1);
+//  hs1.Set(5, 1);
+//  hs1.Set(6, 1);
+//  hs1.Set(7, 3);
+//  hs1.Set(7, 3);
+//  hs1.Set(8, 3);
+//  hs1.Set(9, 12);
+//  //  std::cout << hs1.Get(9);
+//  hs1.Del(5);
+//  hs1.Update(9, 31);
+//  hs1.Rename(9, 52);
+//  //  hs1.print();
+//  s21::HashTable<int, s21::PersonalData> hs3;
+//  hs3.Set(1, {"a", "a", "a", "a", "a"});
+//  hs3.Set(2, {"a", "b", "b", "b", "b"});
+//  hs3.Set(3, {"c", "c", "c", "c", "c"});
+//  hs3.Update(3, {"-", "-", "hui", "-", "gvfd"});
+//  auto z = hs3.ShowAll();
+//  for (int i = 0; i < z.size(); ++i) {
+//    std::cout << z[i].name << " ";
+//    std::cout << z[i].surname << " ";
+//    std::cout << z[i].year << " ";
+//    std::cout << z[i].city << " ";
+//    std::cout << z[i].coins << " ";
+//    std::cout << std::endl;
+//  }
+//  auto k = hs1.Find(1);
+//  for (int i = 0; i < k.size(); ++i) {
+//    std::cout << k[i] << " ";
+//  }
+//  //  std::cout << std::endl;
+//  //  auto v = hs1.ShowAll();
+//  //  for (int i = 0; i < v.size(); ++i) {
+//  //    std::cout << v[i] << std::endl;
+//  //  }
+//
+//  //  for (auto itr : map) {
+//  //    std::cout << itr.first << " : " << itr.second << std::endl;
+//  //  }
+//  //  std::cout << map.size();
+//}

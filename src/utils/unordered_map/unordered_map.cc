@@ -3,8 +3,8 @@
 #include <type_traits>
 #include <string>
 #include <bitset>
-
-#include "iostream"
+#include <iostream>
+#include <typeinfo>
 
 namespace s21 {
 // Constructors
@@ -23,39 +23,38 @@ unordered_map<Key, Value>::unordered_map() {
 
 // Iterator
 template<class Key, class Value>
-typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::begin() const {
+typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::begin() {
   iterator iterator{};
   if (empty()) {
     return iterator;
   }
 
-  for (size_t i = 0; i < buckets_.size(); ++i) {
-    if (!buckets_[i]->empty()) {
-      iterator.bucket_index = i;
-      iterator.bucket_itr = buckets_[i]->begin();
-      iterator.vec_itr = ;
-      auto z = buckets_.begin() + i;
-
+  for (auto itr = buckets_.begin(); itr != buckets_.end(); ++itr) {
+    if (!(*itr)->empty()) {
+      iterator.bucket_itr = (*(*itr)).begin();
+      iterator.vec_itr = itr;
       return iterator;
     }
   }
+
+  return {};
 }
 
-
 template<class Key, class Value>
-typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::end() const {
+typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::end() {
   iterator iterator{};
   if (empty()) {
     return iterator;
   }
 
-  for (size_t i = buckets_.size() - 1; i > 0; --i) {
-    if (!buckets_[i]->empty()) {
-      iterator.bucket_index = i;
-      iterator.bucket_itr = buckets_[i]->end();
+  for (auto itr = buckets_.end(); itr != buckets_.begin(); --itr) {
+    if (!(*itr)->empty()) {
+      iterator.bucket_itr = (*(*itr)).begin();
+      iterator.vec_itr = itr;
       return iterator;
     }
   }
+
   return {};
 }
 
@@ -113,11 +112,12 @@ typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::find_key
 
 template<class Key, class Value>
 size_t unordered_map<Key, Value>::hash(Key key) {
-  if constexpr (std::is_same_v<Key, std::string>) {
-    return hash_string(key);
-  } else {
-    return hash_numeric(key);
-  }
+//  if constexpr (std::is_same<Key, std::string>) {
+//    return hash_string(key);
+//  } else {
+//    return hash_numeric(key);
+//  }
+  return {};
 }
 
 template<class Key, class Value>
@@ -157,7 +157,11 @@ template<class Key, class Value>
 typename unordered_map<Key, Value>::iterator &
 unordered_map<Key, Value>::iterator::operator++() {
   ++bucket_itr;
-//  if (bucket_itr != buckets_)
+  if ((*vec_itr) && bucket_itr != (*vec_itr)->end()) {
+
+  }
+  unordered_map<Key, Value>::iterator itr{};
+  return itr;
 }
 
 }  // namespace s21
@@ -168,12 +172,13 @@ int main() {
   a.insert({1, 1});
   a.insert({2, 2});
 
-  auto b = a.begin();
-  auto e = a.end();
 
-  for (; b != e; ++b) {
+  auto e = a.begin();
 
-  }
+  ++e;
+////  for (auto i = a.begin(); i != a.end(); ++i) {
+//
+//  }
 
   return 0;
 }

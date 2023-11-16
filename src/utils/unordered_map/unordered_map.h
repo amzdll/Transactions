@@ -1,9 +1,10 @@
 #ifndef TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
 #define TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
 
+#include <memory>
+
 #include <list>
 #include <vector>
-
 namespace s21 {
 template<class Key, class Value>
 class unordered_map {
@@ -28,8 +29,8 @@ class unordered_map {
 //  void operator=(unordered_map &&m);
 
 // Iterator
-  iterator begin() const;
-  iterator end() const;
+  iterator begin();
+  iterator end();
 
 // Capacity
   bool empty() const;
@@ -50,7 +51,7 @@ class unordered_map {
 //  T &operator[](const Key &key);
 
  protected:
-  std::vector<bucket> buckets_;
+  std::vector<std::list<value_type> *> buckets_;
   size_type size_ = 0;
 
 //  typename std::vector<bucket>::iterator begin_{};
