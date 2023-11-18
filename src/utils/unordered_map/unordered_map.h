@@ -74,15 +74,18 @@ class unordered_map<Key, Value>::iterator {
   iterator() = default;
   ~iterator() = default;
 
-  bool operator==(const iterator itr);
-  bool operator!=(const iterator itr);
-  iterator& operator=(const iterator itr);
-  iterator& operator++();
+  value_type &operator*();
+  void operator++();
+  void operator--();
+  bool operator==(iterator itr);
+  bool operator!=(iterator itr);
+  iterator& operator=(iterator itr);
+  value_type *operator->();
+
 
 
  private:
-//  typename std::vector<bucket>::iterator vec_itr_ = {};
-  int bucket_index = 0;
+  value_type value_ = {};
   typename std::list<value_type>::iterator bucket_itr = {};
   typename std::vector<std::list<value_type> *>::iterator vec_itr = {};
 };
