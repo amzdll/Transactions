@@ -18,10 +18,13 @@ unordered_map<Key, Value>::unordered_map() {
                 "Not an arithmetic type or std::string");
 
   size_t buckets_size = 10;
-  for (size_t i = 0; i < buckets_size; ++i) {
-    buckets_.push_back(new std::list<value_type>{});
+  for (int i = 0; i < buckets_size; ++i) {
+    std::list<value_type> bucket(0);
+    buckets_.push_back(bucket);
   }
-  buckets_.push_back(nullptr);
+  std::list<value_type> dummy_bucket;
+  dummy_bucket.push_back({});
+  buckets_.push_back(dummy_bucket);
 }
 
 // Iterator
@@ -33,8 +36,8 @@ typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::begin() 
   }
 
   for (auto itr = buckets_.begin(); itr != buckets_.end(); ++itr) {
-    if (!(*itr)->empty()) {
-      iterator.bucket_itr = (*(*itr)).begin();
+    if (!itr->empty()) {
+      iterator.bucket_itr = itr->begin();
       iterator.vec_itr = itr;
       iterator.value_ = *iterator.bucket_itr;
       return iterator;
@@ -77,7 +80,7 @@ bool unordered_map<Key, Value>::insert(const unordered_map::value_type &value) {
 
 //  bool inserted = !find_key(value.first);
 //  if (inserted) {
-  buckets_[hash_numeric(value.first)]->push_back(value);
+  buckets_[hash_numeric(value.first)].push_back(value);
   ++size_;
 //  }
   return true;
@@ -165,11 +168,11 @@ bool unordered_map<Key, Value>::iterator::operator!=(const typename unordered_ma
 template<class Key, class Value>
 void unordered_map<Key, Value>::iterator::operator++() {
   ++bucket_itr;
-  if (*vec_itr) {
-    return;
-  }
+//  if (*vec_itr) {
+//    return;
+//  }
 
-  if (bucket_itr == (*vec_itr)->end()) {
+  if (bucket_itr == vec_itr->end()) {
     ++vec_itr;
     for (; *vec_itr; ++vec_itr) {
       if (!(*vec_itr)->empty()) {
@@ -200,14 +203,12 @@ typename unordered_map<Key, Value>::value_type *unordered_map<Key, Value>::itera
 
 int main() {
   s21::unordered_map<int, int> a;
-  std::unordered_map<int, int> b(2);
-  auto fsd = b.end();
-  std::cout << fsd->first << std::endl;
-//  a.insert({1, 1});
-//  a.insert({2, 2});
-//  auto e = a.begin();
-//
-////  *e;
+  a.insert({1, 1});
+  a.insert({2, 2});
+  auto e = a.begin();
+
+//  *e;
+  ++e;
 ////  std::cout << e->first << std::endl;
 //  int z = 0;
 //  for (auto itr = a.begin(); itr != a.end(); ++itr) {

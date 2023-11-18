@@ -15,7 +15,7 @@ class unordered_map {
   using reference = const value_type &;
   using const_reference = const value_type &;
   using size_type = std::size_t;
-  using bucket = std::list<value_type> *;
+  using buckets = std::vector<std::list<value_type>>;
 
   class iterator;
   friend class iterator;
@@ -45,13 +45,13 @@ class unordered_map {
 //
 // Lookup
   bool contains(const value_type &value);
-//  iterator find(const Key &key);
+//  iterator find(const Key &key);Ï
 //
 //  T &at(const Key &key);
 //  T &operator[](const Key &key);
 
  protected:
-  std::vector<std::list<value_type> *> buckets_;
+  buckets buckets_;
   size_type size_ = 0;
 
 //  typename std::vector<bucket>::iterator begin_{};
@@ -79,17 +79,14 @@ class unordered_map<Key, Value>::iterator {
   void operator--();
   bool operator==(iterator itr);
   bool operator!=(iterator itr);
-  iterator& operator=(iterator itr);
+  iterator &operator=(iterator itr);
   value_type *operator->();
-
-
 
  private:
   value_type value_ = {};
   typename std::list<value_type>::iterator bucket_itr = {};
-  typename std::vector<std::list<value_type> *>::iterator vec_itr = {};
+  typename std::vector<std::list<value_type>>::iterator vec_itr = {};
 };
-
 
 }  // namespace s21
 #endif  // TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
