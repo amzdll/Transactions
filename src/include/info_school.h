@@ -19,12 +19,13 @@ struct PersonalData {
 
   PersonalData() : name({}), surname({}), year({}), city({}), coins({}) {}
 
-  void operator=(PersonalData& other) {
+  PersonalData& operator=(PersonalData const& other) {
     if (other.name != "-") this->name = other.name;
     if (other.surname != "-") this->surname = other.surname;
     if (other.city != "-") this->city = other.city;
     if (other.year != "-") this->year = other.year;
     if (other.coins != "-") this->coins = other.coins;
+    return *this;
   }
 
   bool operator==(const PersonalData& other) const {

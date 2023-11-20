@@ -1,0 +1,12 @@
+todo: bool Set(Key key, Value value) override;
+todo: Value Get(Key key) override;
+todo: bool Exists(Key key) override;
+todo: bool Del(Key key) override;
+todo: void Update(Key key, Value vale) override;
+todo: std::vector<Key> Keys() override;
+todo: bool Rename(Key old_name, Key new_name) override;
+todo: unsigned int TTL(Key key) override;
+todo: std::vector<Key> Find(Value) override;
+todo: std::vector<Value> ShowAll() override;
+todo: int Upload(std::string file_path) override;
+todo: int Export(std::string file_path) override;

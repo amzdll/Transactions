@@ -1,49 +1,36 @@
 #ifndef TRANSACTIONS_SRC_INCLUDE_HASH_TABLE_H_
 #define TRANSACTIONS_SRC_INCLUDE_HASH_TABLE_H_
-#include "iostream"
 
+#include <type_traits>
+
+#include "../utils/unordered_map/unordered_map.cc"
 #include "../utils/unordered_map/unordered_map.h"
 #include "abstract_storage.h"
 #include "info_school.h"
 
-#include <type_traits>
-
-#include <vector>
-#include <list>
-
 namespace s21 {
-template<typename Key, typename Value>
-class HashTable : AbstractStorage<Key, Value> {
+class HashTable : AbstractStorage {
  public:
-  using bucket = std::list<std::pair<Key, Value>>;
-
-  HashTable();
+  HashTable() = default;
   ~HashTable() = default;
 
-  bool Set(Key key, Value value) override;
-  Value Get(Key key) override;
-  bool Exists(Key key) override;
-  bool Del(Key key) override;
-  void Update(Key key, Value vale) override;
-  std::vector<Key> Keys() override;
-  bool Rename(Key old_name, Key new_name) override;
-//  unsigned int TTL(Key key) override;
-  std::vector<Key> Find(Value) override;
-  std::vector<Value> ShowAll() override;
+  bool Set(std::string key, PersonalData value, size_t ex) override;
+  PersonalData Get(std::string key) override;
+  bool Exists(std::string key) override;
+  bool Del(std::string key) override;
+  void Update(std::string key, PersonalData vale) override;
+  std::vector<std::string> Keys() override;
+  bool Rename(std::string old_name, std::string new_name) override;
+  //  unsigned int TTL(std::stringkey) override;
+  std::vector<std::string> Find(PersonalData) override;
+  std::vector<PersonalData> ShowAll() override;
 
-//  int Upload(std::string file_path) override;
-//  int Export(std::string file_path) override;
+  //  int Upload(std::string file_path) override;
+  //  int Export(std::string file_path) override;
 
-
-  size_t Hash(Key key);
 
  private:
-  s21::unordered_map<Key, Value> hash_table;
-
-  std::vector<bucket> buckets_{};
-
-  size_t HashNumeric(Key key);
-  size_t HashString(std::string key);
+  s21::unordered_map<std::string, PersonalData> hash_table_{};
 };
 }  // namespace s21
 

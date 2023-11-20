@@ -1,12 +1,13 @@
 #ifndef TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
 #define TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
-
-#include <memory>
+#include <iostream>
 
 #include <list>
+#include <memory>
 #include <vector>
+
 namespace s21 {
-template<class Key, class Value>
+template <class Key, class Value>
 class unordered_map {
  public:
   using key_type = Key;
@@ -14,12 +15,12 @@ class unordered_map {
   using value_type = std::pair<key_type, mapped_type>;
   using reference = const value_type &;
   using const_reference = const value_type &;
+  class iterator;
   using size_type = std::size_t;
   using buckets = std::vector<std::list<value_type>>;
-  class iterator;
   friend class iterator;
 
-// Constructors
+  // Member functions
   unordered_map();
   // unordered_map(std::initializer_list<value_type> const &items);
   // unordered_map(const unordered_map &m);
@@ -27,43 +28,42 @@ class unordered_map {
   ~unordered_map() = default;
   // void operator=(unordered_map &&m);
 
-// Iterator
+  // Element access
+  // Value &at(const Key &key);
+  // Value &operator[](const Key &key);
+
+  // Iterators
   iterator begin();
   iterator end();
 
-// Capacity
+  // Capacity
   bool empty() const;
   bool size() const;
 
-// Modifiers
+  // Modifiers
   void clear();
-  bool insert(const value_type &value);
+  std::pair<iterator, bool> insert(const value_type &value);
   void erase(iterator pos);
   void swap(unordered_map<Key, Value> &other);
-//  void merge(tree &other);
-//
-// Lookup
-  bool contains(const value_type &value);
-  iterator find(const Key &key);
-//
-//  T &at(const Key &key);
-//  T &operator[](const Key &key);
+  //  void merge(tree &other);
 
-// Bucket interface
+  // Lookup
+  bool contains(const Key &key);
+  iterator find(const Key &key);
+
+  // Bucket interface
   size_type bucket_count();
 
  protected:
   buckets buckets_;
   size_type size_ = 0;
 
-
   size_type hash(Key key);
   size_type hash_string(Key key);
   size_type hash_numeric(Key key);
 };
 
-
-template<class Key, class Value>
+template <class Key, class Value>
 class unordered_map<Key, Value>::iterator {
  public:
   friend class unordered_map;
