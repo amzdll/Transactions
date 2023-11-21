@@ -20,8 +20,8 @@ struct PersonalData {
 
   PersonalData() : name({}), surname({}), year({}), city({}), coins({}) {}
 
-  PersonalData(const std::vector<std::string> data) {
-    if (data.size() == 5) {
+  PersonalData(const std::vector<std::string>& data) {
+    if (data.size() == 6) {
       name = data[1];
       surname = data[2];
       year = data[3];

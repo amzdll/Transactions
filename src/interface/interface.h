@@ -27,7 +27,7 @@ class Interface {
   void Keys();
   void Rename(const std::vector<std::string> &params);
   void Find(const std::vector<std::string> &params);
-  void ShowAll(const std::vector<std::string> &params);
+  void ShowAll();
 
   AbstractStorage *storage_;
   std::map<std::string,

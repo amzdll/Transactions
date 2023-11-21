@@ -26,15 +26,14 @@ void Interface::InitCommands() {
   commands_["Keys"] = std::bind(&Interface::Keys, this);
   commands_["Rename"] = &Interface::Rename;
   commands_["Find"] = &Interface::Find;
-  commands_["ShowAll"] = &Interface::ShowAll;
+  commands_["ShowAll"] = std::bind(&Interface::ShowAll, this);
 }
 
 void Interface::Run() {
   std::string input;
   while (input != "exit") {
-    std::cout << "Введите команду (или 'exit' для выхода): ";
+    //    std::cout << "Введите команду (или 'exit' для выхода): ";
     std::getline(std::cin, input);
-
     std::istringstream iss(input);
     std::vector<std::string> tokens{std::istream_iterator<std::string>{iss},
                                     std::istream_iterator<std::string>{}};
@@ -42,7 +41,7 @@ void Interface::Run() {
       auto it = commands_.find(tokens[0]);
       if (it != commands_.end()) {
         tokens.erase(tokens.begin());
-        it->second(*this, tokens);  // Pass the instance of Interface
+        it->second(*this, tokens);
       } else {
         std::cout << "Неизвестная команда." << std::endl;
       }
@@ -66,15 +65,26 @@ void Interface::Del(const std::vector<std::string> &params) {
   std::cout << "hui4" << std::endl;
 }
 void Interface::Update(const std::vector<std::string> &params) {
-  std::cout << "hui5" << std::endl;
+  if (params.size() == 6) {
+    storage_->Update(params[0], {params});
+  }
 }
+
 void Interface::Keys() {
   for (auto key : storage_->Keys()) {
     std::cout << key << std::endl;
   }
 }
+
 void Interface::Rename(const std::vector<std::string> &params) {}
+
 void Interface::Find(const std::vector<std::string> &params) {}
-void Interface::ShowAll(const std::vector<std::string> &params) {}
+
+void Interface::ShowAll() {
+  for (auto value : storage_->ShowAll()) {
+    std::printf("%s %s %s %s %s\n", value.name.c_str(), value.surname.c_str(),
+                value.city.c_str(), value.year.c_str(), value.coins.c_str());
+  }
+}
 
 }  // namespace s21

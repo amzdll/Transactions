@@ -9,11 +9,11 @@
 
 namespace s21 {
 // Constructors
-template<class Key, class Value>
+template <class Key, class Value>
 unordered_map<Key, Value>::unordered_map() {
   static_assert(!(std::is_same<Key, char>::value) &&
                     (std::is_arithmetic<Key>::value ||
-                        std::is_same<Key, std::string>::value),
+                     std::is_same<Key, std::string>::value),
                 "Not an arithmetic type or std::string");
 
   size_t buckets_size = 10;
@@ -27,7 +27,7 @@ unordered_map<Key, Value>::unordered_map() {
 }
 
 // Element Access
-template<class Key, class Value>
+template <class Key, class Value>
 Value &unordered_map<Key, Value>::operator[](const Key &key) {
   iterator iterator = find(key);
   if (iterator == end()) {
@@ -38,7 +38,7 @@ Value &unordered_map<Key, Value>::operator[](const Key &key) {
 }
 
 // Iterator
-template<class Key, class Value>
+template <class Key, class Value>
 typename unordered_map<Key, Value>::iterator
 unordered_map<Key, Value>::begin() {
   iterator iterator{};
@@ -54,34 +54,31 @@ unordered_map<Key, Value>::begin() {
       return iterator;
     }
   }
-
   return {};
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::end() {
   iterator iterator{};
-
   if (!empty()) {
     iterator.vector_itr_ = --buckets_.end();
     iterator.bucket_itr_ = iterator.vector_itr_->begin();
   }
-
   return iterator;
 }
 
 // Capacity
-template<class Key, class Value>
+template <class Key, class Value>
 bool unordered_map<Key, Value>::size() const {
   return size_;
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 bool unordered_map<Key, Value>::empty() const {
   return !size_;
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 std::pair<typename unordered_map<Key, Value>::iterator, bool>
 unordered_map<Key, Value>::insert(const unordered_map::value_type &value) {
   iterator iterator{};
@@ -95,38 +92,40 @@ unordered_map<Key, Value>::insert(const unordered_map::value_type &value) {
 }
 
 // Modifiers
-template<class Key, class Value>
+template <class Key, class Value>
 void unordered_map<Key, Value>::clear() {}
 
-template<class Key, class Value>
+template <class Key, class Value>
 void unordered_map<Key, Value>::erase(unordered_map::iterator pos) {
   pos.vector_itr_->erase(pos.bucket_itr_);
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 void unordered_map<Key, Value>::swap(unordered_map<Key, Value> &other) {
   std::swap(buckets_, other.buckets_);
   std::swap(size_, other.size_);
 }
 
 // Lookup
-template<class Key, class Value>
+template <class Key, class Value>
 bool unordered_map<Key, Value>::contains(const Key &key) {
   return find(key) != end();
 }
 
 // Bucket Interface
-template<class Key, class Value>
+template <class Key, class Value>
 size_t unordered_map<Key, Value>::bucket_count() {
   return buckets_.size();
 }
 
 // Additional
-template<class Key, class Value>
-typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::find(const Key &key) {
+template <class Key, class Value>
+typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::find(
+    const Key &key) {
   int hash_key = hash(key);
   unordered_map<Key, Value>::iterator iterator = end();
-  for (auto itr = buckets_[hash_key].begin(); itr != buckets_[hash_key].end(); ++itr) {
+  for (auto itr = buckets_[hash_key].begin(); itr != buckets_[hash_key].end();
+       ++itr) {
     if (key == itr->first) {
       iterator.value_ = *itr;
       iterator.bucket_itr_ = itr;
@@ -136,7 +135,7 @@ typename unordered_map<Key, Value>::iterator unordered_map<Key, Value>::find(con
   return iterator;
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 size_t unordered_map<Key, Value>::hash(Key key) {
   if constexpr (std::is_same<Key, std::string>::value) {
     return hash_string(key);
@@ -145,20 +144,20 @@ size_t unordered_map<Key, Value>::hash(Key key) {
   }
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 size_t unordered_map<Key, Value>::hash_numeric(Key key) {
   std::bitset<sizeof(Key) * 8> bits(key);
   return (key ^ (key << 13) * bits.count()) % buckets_.capacity();
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 size_t unordered_map<Key, Value>::hash_string(Key key) {
-//  std::cout << "string" << std::endl;
+  //  std::cout << "string" << std::endl;
   return 0;
 }
 
 // Iterator
-template<class Key, class Value>
+template <class Key, class Value>
 typename unordered_map<Key, Value>::iterator &
 unordered_map<Key, Value>::iterator::operator=(
     const typename unordered_map<Key, Value>::iterator itr) {
@@ -166,24 +165,25 @@ unordered_map<Key, Value>::iterator::operator=(
   vector_itr_ = itr.vector_itr_;
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 bool unordered_map<Key, Value>::iterator::operator==(
     const typename unordered_map<Key, Value>::iterator itr) {
   return itr.vector_itr_ == vector_itr_ && bucket_itr_ == itr.bucket_itr_;
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 bool unordered_map<Key, Value>::iterator::operator!=(
     const typename unordered_map<Key, Value>::iterator itr) {
   return !(*this == itr);
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 void unordered_map<Key, Value>::iterator::operator++() {
   ++bucket_itr_;
   if (bucket_itr_ == vector_itr_->end()) {
     ++vector_itr_;
-    for (; vector_itr_->empty(); ++vector_itr_) {}
+    for (; vector_itr_->empty(); ++vector_itr_) {
+    }
     bucket_itr_ = vector_itr_->begin();
     value_ = *(vector_itr_->begin());
   } else {
@@ -191,19 +191,19 @@ void unordered_map<Key, Value>::iterator::operator++() {
   }
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 void unordered_map<Key, Value>::iterator::operator--() {}
 
-template<class Key, class Value>
+template <class Key, class Value>
 typename unordered_map<Key, Value>::value_type &
 unordered_map<Key, Value>::iterator::operator*() {
-  return value_;
+  return *bucket_itr_;
 }
 
-template<class Key, class Value>
+template <class Key, class Value>
 typename unordered_map<Key, Value>::value_type *
 unordered_map<Key, Value>::iterator::operator->() {
-  return &(value_);
+  return &(*bucket_itr_);
 }
 
 }  // namespace s21
