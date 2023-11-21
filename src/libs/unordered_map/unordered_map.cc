@@ -1,11 +1,9 @@
 #include "unordered_map.h"
 
 #include <bitset>
-#include <iostream>
 #include <string>
 #include <type_traits>
-#include <typeinfo>
-#include <unordered_map>
+
 
 namespace s21 {
 // Constructors

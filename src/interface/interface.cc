@@ -54,9 +54,9 @@ void Interface::Run() {
   }
 }
 
-void Interface::Set(const std::vector<std::string> &params) {
-  if (params.size() == 6) {
-    if (storage_->Set(params[0], {params})) {
+void Interface::Set(const std::vector<std::string> &data) {
+  if (data.size() == 6) {
+    if (storage_->Set(data[0], {std::vector<std::string>(data.begin() + 1, data.end())})) {
       std::cout << "> OK" << std::endl;
     } else {
       ;
@@ -64,9 +64,9 @@ void Interface::Set(const std::vector<std::string> &params) {
   }
 }
 
-void Interface::Get(const std::vector<std::string> &params) {
-  if (params.size() == 1) {
-    PersonalData personal_data = storage_->Get(params[0]);
+void Interface::Get(const std::vector<std::string> &data) {
+  if (data.size() == 1) {
+    PersonalData personal_data = storage_->Get(data[0]);
     //    if (!personal_data.empty())
     //    else std::cout << "> (null)" << std::endl;
     std::printf("> %s %s %s %s %s\n", personal_data.name.c_str(),
@@ -75,23 +75,22 @@ void Interface::Get(const std::vector<std::string> &params) {
   }
 }
 
-void Interface::Exists(const std::vector<std::string> &params) {
-  if (params.size() == 1) {
-    std::cout << std::boolalpha << "> " << storage_->Exists(params[0])
+void Interface::Exists(const std::vector<std::string> &data) {
+  if (data.size() == 1) {
+    std::cout << std::boolalpha << "> " << storage_->Exists(data[0])
               << std::endl;
   }
 }
 
-void Interface::Del(const std::vector<std::string> &params) {
-  if (params.size() == 1) {
-    std::cout << std::boolalpha << "> " << storage_->Del(params[0])
-              << std::endl;
+void Interface::Del(const std::vector<std::string> &data) {
+  if (data.size() == 1) {
+    std::cout << std::boolalpha << "> " << storage_->Del(data[0]) << std::endl;
   }
 }
 
-void Interface::Update(const std::vector<std::string> &params) {
-  if (params.size() == 6) {
-    storage_->Update(params[0], {params});
+void Interface::Update(const std::vector<std::string> &data) {
+  if (data.size() == 6) {
+    storage_->Update(data[0], {data});
   }
 }
 
@@ -103,13 +102,21 @@ void Interface::Keys() {
   }
 }
 
-void Interface::Rename(const std::vector<std::string> &params) {
-  if (params.size() == 2) {
-    storage_->Rename(params[0], params[1]);
+void Interface::Rename(const std::vector<std::string> &data) {
+  if (data.size() == 2) {
+    storage_->Rename(data[0], data[1]);
   }
 }
 
-void Interface::Find(const std::vector<std::string> &params) {}
+void Interface::Find(const std::vector<std::string> &data) {
+  if (data.size() == 5) {
+    int counter = 1;
+    for (const auto &key : storage_->Find({data})) {
+      std::cout << counter << ") " << key << std::endl;
+      ++counter;
+    }
+  }
+}
 
 void Interface::ShowAll() {
   for (auto value : storage_->ShowAll()) {

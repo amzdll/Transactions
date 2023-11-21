@@ -32,28 +32,26 @@ bool HashTable::Update(std::string key, PersonalData value) {
 
 std::vector<std::string> HashTable::Keys() {
   std::vector<std::string> keys{};
-  for (auto itr = hash_table_.begin(); itr != hash_table_.end(); ++itr) {
-    keys.push_back(itr->first);
+  for (const auto& itr: hash_table_) {
+    keys.push_back(itr.first);
   }
   return keys;
 }
 
 std::vector<std::string> HashTable::Find(PersonalData value) {
   std::vector<std::string> keys{};
-  //  for (int i = 0; i < buckets_.size(); ++i) {
-  //    for (auto itr : buckets_[i]) {
-  //      if (itr.second == value) {
-  //        keys.push_back(itr.first);
-  //      }
-  //    }
-  //  }
+  for (const auto& itr: hash_table_) {
+    if (itr.second == value) {
+      keys.push_back(itr.first);
+    }
+  }
   return keys;
 }
 
 std::vector<PersonalData> HashTable::ShowAll() {
   std::vector<PersonalData> values{};
-  for (auto itr = hash_table_.begin(); itr != hash_table_.end(); ++itr) {
-    values.push_back(itr->second);
+  for (const auto& itr: hash_table_) {
+    values.push_back(itr.second);
   }
   return values;
 }
