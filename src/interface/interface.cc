@@ -1,20 +1,26 @@
-
 #include "interface.h"
 
 namespace s21 {
 s21::Interface::Interface() {
   InitCommands();
+  InitStorage();
+}
+
+bool Interface::InitStorage() {
   int choice = 0;
+  bool inited = false;
   std::cout << "Choose data structure:(1 - Hash Table, 2 - Balance Tree)"
             << std::endl;
   std::cin >> choice;
   if (choice == 1) {
     storage_ = new HashTable();
+    inited = true;
   } else if (choice == 2) {
-    ;
+    inited = true;
   } else {
     std::cout << "Invalid input" << std::endl;
   }
+  return inited;
 }
 
 void Interface::InitCommands() {
@@ -23,16 +29,15 @@ void Interface::InitCommands() {
   commands_["Exists"] = &Interface::Exists;
   commands_["Del"] = &Interface::Del;
   commands_["Update"] = &Interface::Update;
-  commands_["Keys"] = std::bind(&Interface::Keys, this);
   commands_["Rename"] = &Interface::Rename;
   commands_["Find"] = &Interface::Find;
+  commands_["Keys"] = std::bind(&Interface::Keys, this);
   commands_["ShowAll"] = std::bind(&Interface::ShowAll, this);
 }
 
 void Interface::Run() {
   std::string input;
   while (input != "exit") {
-    //    std::cout << "Введите команду (или 'exit' для выхода): ";
     std::getline(std::cin, input);
     std::istringstream iss(input);
     std::vector<std::string> tokens{std::istream_iterator<std::string>{iss},
@@ -51,19 +56,39 @@ void Interface::Run() {
 
 void Interface::Set(const std::vector<std::string> &params) {
   if (params.size() == 6) {
-    storage_->Set(params[0], {params});
+    if (storage_->Set(params[0], {params})) {
+      std::cout << "> OK" << std::endl;
+    } else {
+      ;
+    }
   }
 }
 
 void Interface::Get(const std::vector<std::string> &params) {
-  std::cout << "hui2" << std::endl;
+  if (params.size() == 1) {
+    PersonalData personal_data = storage_->Get(params[0]);
+    //    if (!personal_data.empty())
+    //    else std::cout << "> (null)" << std::endl;
+    std::printf("> %s %s %s %s %s\n", personal_data.name.c_str(),
+                personal_data.surname.c_str(), personal_data.city.c_str(),
+                personal_data.year.c_str(), personal_data.coins.c_str());
+  }
 }
+
 void Interface::Exists(const std::vector<std::string> &params) {
-  std::cout << "hui3" << std::endl;
+  if (params.size() == 1) {
+    std::cout << std::boolalpha << "> " << storage_->Exists(params[0])
+              << std::endl;
+  }
 }
+
 void Interface::Del(const std::vector<std::string> &params) {
-  std::cout << "hui4" << std::endl;
+  if (params.size() == 1) {
+    std::cout << std::boolalpha << "> " << storage_->Del(params[0])
+              << std::endl;
+  }
 }
+
 void Interface::Update(const std::vector<std::string> &params) {
   if (params.size() == 6) {
     storage_->Update(params[0], {params});
@@ -71,12 +96,18 @@ void Interface::Update(const std::vector<std::string> &params) {
 }
 
 void Interface::Keys() {
-  for (auto key : storage_->Keys()) {
-    std::cout << key << std::endl;
+  int counter = 1;
+  for (const auto &key : storage_->Keys()) {
+    std::cout << counter << ") " << key << std::endl;
+    ++counter;
   }
 }
 
-void Interface::Rename(const std::vector<std::string> &params) {}
+void Interface::Rename(const std::vector<std::string> &params) {
+  if (params.size() == 2) {
+    storage_->Rename(params[0], params[1]);
+  }
+}
 
 void Interface::Find(const std::vector<std::string> &params) {}
 

@@ -1,7 +1,6 @@
 #ifndef TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
 #define TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
 #include <iostream>
-
 #include <list>
 #include <vector>
 
@@ -28,8 +27,8 @@ class unordered_map {
   // void operator=(unordered_map &&m);
 
   // Element access
-//   Value &at(const Key &key);
-   Value &operator[](const Key &key);
+  //   Value &at(const Key &key);
+  Value &operator[](const Key &key);
 
   // Iterators
   iterator begin();

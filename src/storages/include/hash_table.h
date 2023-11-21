@@ -3,10 +3,10 @@
 
 #include <type_traits>
 
-#include "../utils/unordered_map/unordered_map.cc"
-#include "../utils/unordered_map/unordered_map.h"
 #include "abstract_storage.h"
 #include "info_school.h"
+#include "unordered_map.cc"
+#include "unordered_map.h"
 
 namespace s21 {
 class HashTable : public AbstractStorage {
@@ -27,7 +27,6 @@ class HashTable : public AbstractStorage {
 
   //  int Upload(std::string file_path) override;
   //  int Export(std::string file_path) override;
-
 
  private:
   s21::unordered_map<std::string, PersonalData> hash_table_{};

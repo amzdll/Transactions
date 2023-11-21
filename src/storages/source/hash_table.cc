@@ -1,6 +1,4 @@
-
-#include <bitset>
-#include "../include/hash_table.h"
+#include "hash_table.h"
 
 namespace s21 {
 bool HashTable::Set(std::string key, PersonalData value, size_t ex) {
@@ -8,7 +6,8 @@ bool HashTable::Set(std::string key, PersonalData value, size_t ex) {
 }
 
 PersonalData HashTable::Get(std::string key) {
-  return hash_table_.find(key)->second;
+  return hash_table_.contains(key) ? hash_table_.find(key)->second
+                                   : PersonalData();
 }
 
 bool HashTable::Exists(std::string key) {
@@ -17,7 +16,9 @@ bool HashTable::Exists(std::string key) {
 
 bool HashTable::Del(std::string key) {
   unordered_map<std::string, PersonalData>::iterator itr = hash_table_.find(key);
-  hash_table_.erase(itr);
+  if (itr != hash_table_.end()) {
+    hash_table_.erase(itr);
+  }
   return itr != hash_table_.end();
 }
 
@@ -39,13 +40,13 @@ std::vector<std::string> HashTable::Keys() {
 
 std::vector<std::string> HashTable::Find(PersonalData value) {
   std::vector<std::string> keys{};
-//  for (int i = 0; i < buckets_.size(); ++i) {
-//    for (auto itr : buckets_[i]) {
-//      if (itr.second == value) {
-//        keys.push_back(itr.first);
-//      }
-//    }
-//  }
+  //  for (int i = 0; i < buckets_.size(); ++i) {
+  //    for (auto itr : buckets_[i]) {
+  //      if (itr.second == value) {
+  //        keys.push_back(itr.first);
+  //      }
+  //    }
+  //  }
   return keys;
 }
 
@@ -67,20 +68,3 @@ bool HashTable::Rename(std::string old_name, std::string new_name) {
   return true;
 }
 }  // namespace s21
-
-//int main() {
-//  s21::HashTable a;
-//  a.Set("1", {"1","1","1","1","1"});
-//  a.Set("2", {"1","1","1","1","1"});
-//  a.Set("3", {"1","1","1","1","1"});
-//
-//
-//  for (const auto& value : a.ShowAll()) {
-//    std::cout << value.name << std::endl;
-//    std::printf("%s %s %s %s %s\n", value.name.c_str(), value.name.c_str(),
-//                value.name.c_str(), value.name.c_str(), value.name.c_str());
-//  }
-////  for (auto i : a) {
-////    std::cout << i.first<< " " << i.second << std::endl;
-////  }
-//}

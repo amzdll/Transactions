@@ -1,0 +1,8 @@
+1. Reallocate buckets
+2. Handle errs in interface
+3. Add tree -> map
+4. Hash string
+5. Personal Data: Refactor structure to class
+6. Test
+7. Makefile
+9. Implement Balance Tree class

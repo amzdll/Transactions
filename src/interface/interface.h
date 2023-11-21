@@ -2,13 +2,12 @@
 #define TRANSACTIONS_SRC_INTERFACE_INTERFACE_H_
 
 #include <functional>
-#include <iterator>  // Include the <iterator> header
+#include <iterator>
 #include <map>
 #include <sstream>
+#include <string>
 
-#include "../include/hash_table.h"
-#include "string"
-#include "string_view"
+#include "hash_table.h"
 
 namespace s21 {
 class Interface {
@@ -17,6 +16,7 @@ class Interface {
   void Run();
 
  private:
+  bool InitStorage();
   void InitCommands();
 
   void Set(const std::vector<std::string> &params);
@@ -29,7 +29,7 @@ class Interface {
   void Find(const std::vector<std::string> &params);
   void ShowAll();
 
-  AbstractStorage *storage_;
+  AbstractStorage *storage_{};
   std::map<std::string,
            std::function<void(Interface &, const std::vector<std::string> &)>>
       commands_;
