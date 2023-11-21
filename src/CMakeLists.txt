@@ -15,30 +15,35 @@ add_library(unordered_map
         libs/unordered_map/unordered_map.h
 )
 
+add_library(map
+        libs/map/map.cc
+        libs/map/map.h
+)
+
 add_library(hash_table
+        storages/include/abstract_storage.h
         storages/source/hash_table.cc
         storages/include/hash_table.h
 )
 
+add_library(self_balancing_binary_search_tree
+        storages/include/abstract_storage.h
+        storages/source/self_balancing_binary_search_tree.cc
+        storages/include/self_balancing_binary_search_tree.h
+)
+
 add_executable(Transactions
         main.cc
-        storages/include/abstract_storage.h
-        storages/source/hash_table.cc
-        storages/include/hash_table.h
-        storages/source/info_school.cc
-        storages/include/info_school.h
-        libs/unordered_map/unordered_map.cc
-        libs/unordered_map/unordered_map.h
-
-        #        src/include/self_balancing_binary_search_tree.h
-        #        src/source/self_balancing_binary_search_tree.cc
-
-        interface/interface.cc interface/interface.h interface/interface.cc
-        utils/student_data/student_data.cc
-        utils/student_data/student_data.h)
+        interface/interface.cc
+        interface/interface.h
+)
 
 target_include_directories(unordered_map PUBLIC ${INCLUDE_DIR})
+target_include_directories(map PUBLIC ${INCLUDE_DIR})
+target_include_directories(self_balancing_binary_search_tree PUBLIC ${INCLUDE_DIR})
 target_include_directories(hash_table PUBLIC ${INCLUDE_DIR})
 
 
-target_link_libraries(Transactions PRIVATE unordered_map hash_table)
+target_link_libraries(Transactions PRIVATE
+        unordered_map unordered_map
+        hash_table self_balancing_binary_search_tree)
