@@ -9,16 +9,16 @@
 #include "info_school.h"
 
 namespace s21 {
-class HashTable : AbstractStorage {
+class HashTable : public AbstractStorage {
  public:
   HashTable() = default;
   ~HashTable() = default;
 
-  bool Set(std::string key, PersonalData value, size_t ex) override;
+  bool Set(std::string key, PersonalData value, size_t ex = 0) override;
   PersonalData Get(std::string key) override;
   bool Exists(std::string key) override;
   bool Del(std::string key) override;
-  void Update(std::string key, PersonalData vale) override;
+  bool Update(std::string key, PersonalData val) override;
   std::vector<std::string> Keys() override;
   bool Rename(std::string old_name, std::string new_name) override;
   //  unsigned int TTL(std::stringkey) override;

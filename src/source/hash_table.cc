@@ -21,16 +21,16 @@ bool HashTable::Del(std::string key) {
   return itr != hash_table_.end();
 }
 
-void HashTable::Update(std::string key, PersonalData value) {
-//  bool is_updated = false;
-//  int hash_key = Hash(key);
-//  auto pos = buckets_[hash_key].begin();
-//  for (; pos != buckets_[hash_key].end() && !is_updated; ++pos) {
-//    if (key == pos->first) {
-//      is_updated = true;
-//      pos->second = value;
-//    }
-//  }
+// FIX
+bool HashTable::Update(std::string key, PersonalData value) {
+  if (!hash_table_.contains(key)) {
+    return false;
+  }
+
+  std::cout << key <<  hash_table_[key].name << std::endl;
+  hash_table_[key] = value;
+  std::cout << hash_table_[key].name << std::endl;
+  return true;
 }
 
 std::vector<std::string> HashTable::Keys() {
@@ -55,32 +55,19 @@ std::vector<std::string> HashTable::Find(PersonalData value) {
 
 std::vector<PersonalData> HashTable::ShowAll() {
   std::vector<PersonalData> values{};
-//  for (int i = 0; i < buckets_.size(); ++i) {
-//    for (auto itr : buckets_[i]) {
-//      values.push_back(itr.second);
-//    }
-//  }
+  for (auto itr = hash_table_.begin(); itr != hash_table_.end(); ++itr) {
+    values.push_back(itr->second);
+  }
   return values;
 }
 
 bool HashTable::Rename(std::string old_name, std::string new_name) {
-//  bool is_renamed = false;
-//  if (!Exists(new_name)) {
-//    int hash_key = Hash(old_name);
-//    auto pos = buckets_[hash_key].begin();
-//    for (; pos != buckets_[hash_key].end() && !is_renamed; ++pos) {
-//      if (old_name == pos->first) {
-//        is_renamed = true;
-//        pos->first = new_name;
-//      }
-//    }
-//  }
-  return false;
+  if (!hash_table_.contains(old_name) && hash_table_.contains(new_name)) {
+    return false;
+  }
+  auto iterator = hash_table_.find(old_name);
+  hash_table_.erase(iterator);
+  hash_table_.insert({new_name, iterator->second});
+  return true;
 }
 }  // namespace s21
-
-
-
-int main() {
-  return 0;
-}

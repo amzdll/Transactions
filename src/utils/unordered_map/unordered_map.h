@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include <list>
-#include <memory>
 #include <vector>
 
 namespace s21 {
@@ -29,8 +28,8 @@ class unordered_map {
   // void operator=(unordered_map &&m);
 
   // Element access
-  // Value &at(const Key &key);
-  // Value &operator[](const Key &key);
+//   Value &at(const Key &key);
+   Value &operator[](const Key &key);
 
   // Iterators
   iterator begin();

@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <vector>
 
 namespace s21 {
 struct PersonalData {
@@ -19,21 +20,33 @@ struct PersonalData {
 
   PersonalData() : name({}), surname({}), year({}), city({}), coins({}) {}
 
-  PersonalData& operator=(PersonalData const& other) {
-    if (other.name != "-") this->name = other.name;
-    if (other.surname != "-") this->surname = other.surname;
-    if (other.city != "-") this->city = other.city;
-    if (other.year != "-") this->year = other.year;
-    if (other.coins != "-") this->coins = other.coins;
+  PersonalData(const std::vector<std::string> data) {
+    if (data.size() == 5) {
+      name = data[1];
+      surname = data[2];
+      year = data[3];
+      city = data[4];
+      coins = data[5];
+    }
+  }
+
+  PersonalData &operator=(PersonalData const &other) {
+    if (this != &other) {
+      if (other.name != "-") name = other.name;
+      if (other.surname != "-") surname = other.surname;
+      if (other.city != "-") city = other.city;
+      if (other.year != "-") year = other.year;
+      if (other.coins != "-") coins = other.coins;
+    }
     return *this;
   }
 
-  bool operator==(const PersonalData& other) const {
+  bool operator==(const PersonalData &other) const {
     return (name == other.name || other.name == "-") &&
-           (surname == other.surname || other.surname == "-") &&
-           (year == other.year || other.year == "-") &&
-           (city == other.city || other.city == "-") &&
-           (coins == other.coins || other.coins == "-");
+        (surname == other.surname || other.surname == "-") &&
+        (year == other.year || other.year == "-") &&
+        (city == other.city || other.city == "-") &&
+        (coins == other.coins || other.coins == "-");
   }
 };
 }  // namespace s21
