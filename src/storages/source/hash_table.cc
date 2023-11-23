@@ -1,13 +1,13 @@
 #include "hash_table.h"
 
 namespace s21 {
-bool HashTable::Set(std::string key, PersonalData value, size_t ex) {
+bool HashTable::Set(std::string key, StudentData value, size_t ex) {
   return hash_table_.insert({key, value}).second;
 }
 
-PersonalData HashTable::Get(std::string key) {
+StudentData HashTable::Get(std::string key) {
   return hash_table_.contains(key) ? hash_table_.find(key)->second
-                                   : PersonalData();
+                                   : StudentData();
 }
 
 bool HashTable::Exists(std::string key) {
@@ -15,14 +15,14 @@ bool HashTable::Exists(std::string key) {
 }
 
 bool HashTable::Del(std::string key) {
-  unordered_map<std::string, PersonalData>::iterator itr = hash_table_.find(key);
+  unordered_map<std::string, StudentData>::iterator itr = hash_table_.find(key);
   if (itr != hash_table_.end()) {
     hash_table_.erase(itr);
   }
   return itr != hash_table_.end();
 }
 
-bool HashTable::Update(std::string key, PersonalData value) {
+bool HashTable::Update(std::string key, StudentData value) {
   if (!hash_table_.contains(key)) {
     return false;
   }
@@ -38,7 +38,7 @@ std::vector<std::string> HashTable::Keys() {
   return keys;
 }
 
-std::vector<std::string> HashTable::Find(PersonalData value) {
+std::vector<std::string> HashTable::Find(StudentData value) {
   std::vector<std::string> keys{};
   for (const auto& itr: hash_table_) {
     if (itr.second == value) {
@@ -48,8 +48,8 @@ std::vector<std::string> HashTable::Find(PersonalData value) {
   return keys;
 }
 
-std::vector<PersonalData> HashTable::ShowAll() {
-  std::vector<PersonalData> values{};
+std::vector<StudentData> HashTable::ShowAll() {
+  std::vector<StudentData> values{};
   for (const auto& itr: hash_table_) {
     values.push_back(itr.second);
   }

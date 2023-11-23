@@ -1,5 +1,6 @@
 #ifndef TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
 #define TRANSACTIONS_SRC_UTILS_UNSORTED_MAP_UNSORTED_MAP_H_
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -8,6 +9,7 @@ namespace s21 {
 template <class Key, class Value>
 class unordered_map {
  public:
+  // Members type
   using key_type = Key;
   using mapped_type = Value;
   using value_type = std::pair<key_type, mapped_type>;
@@ -18,7 +20,7 @@ class unordered_map {
   using buckets = std::vector<std::list<value_type>>;
   friend class iterator;
 
-  // Member functions
+  // Constructors
   unordered_map();
   // unordered_map(std::initializer_list<value_type> const &items);
   // unordered_map(const unordered_map &m);
@@ -57,8 +59,8 @@ class unordered_map {
   size_type size_ = 0;
 
   size_type hash(Key key);
-  size_type hash_string(Key key);
   size_type hash_numeric(Key key);
+  size_type hash_string(Key key);
 };
 
 template <class Key, class Value>

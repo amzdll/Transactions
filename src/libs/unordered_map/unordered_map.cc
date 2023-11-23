@@ -4,7 +4,6 @@
 #include <string>
 #include <type_traits>
 
-
 namespace s21 {
 // Constructors
 template <class Key, class Value>
@@ -150,8 +149,12 @@ size_t unordered_map<Key, Value>::hash_numeric(Key key) {
 
 template <class Key, class Value>
 size_t unordered_map<Key, Value>::hash_string(Key key) {
-  //  std::cout << "string" << std::endl;
-  return 0;
+  int data_to_hash = 0;
+  for (auto c : key) {
+    data_to_hash += c;
+  }
+  std::bitset<sizeof(Key) * 8> bits(data_to_hash);
+  return (data_to_hash ^ (data_to_hash << 13) * bits.count()) % buckets_.capacity();
 }
 
 // Iterator
@@ -205,4 +208,4 @@ unordered_map<Key, Value>::iterator::operator->() {
 }
 
 }  // namespace s21
-//
+   //

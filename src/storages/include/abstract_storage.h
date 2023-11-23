@@ -4,21 +4,21 @@
 #include <string>
 #include <vector>
 
-#include "info_school.h"
+#include "student_data.h"
 
 namespace s21 {
 class AbstractStorage {
  public:
-  virtual bool Set(std::string key, PersonalData value, size_t ex = 0) = 0;
-  virtual PersonalData Get(std::string key) = 0;
+  virtual bool Set(std::string key, StudentData value, size_t ex = 0) = 0;
+  virtual StudentData Get(std::string key) = 0;
   virtual bool Exists(std::string key) = 0;
   virtual bool Del(std::string key) = 0;
-  virtual bool Update(std::string key, PersonalData value) = 0;
+  virtual bool Update(std::string key, StudentData value) = 0;
   virtual std::vector<std::string> Keys() = 0;
   virtual bool Rename(std::string old_name, std::string new_name) = 0;
   //  virtual unsigned int TTL(std::string key) = 0;
-  virtual std::vector<std::string> Find(PersonalData) = 0;
-  virtual std::vector<PersonalData> ShowAll() = 0;
+  virtual std::vector<std::string> Find(StudentData) = 0;
+  virtual std::vector<StudentData> ShowAll() = 0;
 
   //  virtual int Upload(std::string file_path) = 0;
   //  virtual int Export(std::string file_path) = 0;

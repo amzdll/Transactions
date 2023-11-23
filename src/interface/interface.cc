@@ -54,9 +54,11 @@ void Interface::Run() {
   }
 }
 
+
 void Interface::Set(const std::vector<std::string> &data) {
   if (data.size() == 6) {
-    if (storage_->Set(data[0], {std::vector<std::string>(data.begin() + 1, data.end())})) {
+    if (storage_->Set(data[0], {std::vector<std::string>(data.begin() + 1,
+                                                         data.end())})) {
       std::cout << "> OK" << std::endl;
     } else {
       ;
@@ -66,12 +68,13 @@ void Interface::Set(const std::vector<std::string> &data) {
 
 void Interface::Get(const std::vector<std::string> &data) {
   if (data.size() == 1) {
-    PersonalData personal_data = storage_->Get(data[0]);
-    //    if (!personal_data.empty())
+    StudentData student_data = storage_->Get(data[0]);
+    //    if (!student_data.empty())
     //    else std::cout << "> (null)" << std::endl;
-    std::printf("> %s %s %s %s %s\n", personal_data.name.c_str(),
-                personal_data.surname.c_str(), personal_data.city.c_str(),
-                personal_data.year.c_str(), personal_data.coins.c_str());
+    std::printf(
+        "> %s %s %s %s %s\n", student_data.get_name().c_str(),
+        student_data.get_surname().c_str(), student_data.get_city().c_str(),
+        student_data.get_year().c_str(), student_data.get_coins().c_str());
   }
 }
 
@@ -120,8 +123,11 @@ void Interface::Find(const std::vector<std::string> &data) {
 
 void Interface::ShowAll() {
   for (auto value : storage_->ShowAll()) {
-    std::printf("%s %s %s %s %s\n", value.name.c_str(), value.surname.c_str(),
-                value.city.c_str(), value.year.c_str(), value.coins.c_str());
+    int counter = 1;
+    std::printf("%d) %s %s %s %s %s\n", counter, value.get_name().c_str(),
+                value.get_surname().c_str(), value.get_city().c_str(),
+                value.get_year().c_str(), value.get_coins().c_str());
+    ++counter;
   }
 }
 
