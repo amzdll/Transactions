@@ -50,9 +50,19 @@ class map {
   void swap(map &other);
   void merge(map &other);
 
+  Value &at(const Key &key);
+  Value &operator[](const Key &key);
+
   bool contains(const value_type &value);
   iterator find(const Key &key);
 
+//  std::pair<iterator, bool> insert(const_reference value);
+  std::pair<iterator, bool> insert(const key_type &key, const mapped_type &obj);
+  std::pair<iterator, bool> insert_or_assign(const key_type &key,
+                                             const mapped_type &obj);
+
+ private:
+  iterator find_key(const key_type &key);
   bool insert(value_type value);
   node_ *create_node(value_type value, bool is_red);
   void update_side_nodes(node_ *node);
@@ -81,7 +91,6 @@ class map {
       s21::map<Key, Value>::node_ *brother);
   void delete_node(node_ *node);
 
- private:
   node_ *root_ = nullptr;
   node_ *begin_node_ = nullptr;
   node_ *end_node_ = nullptr;

@@ -18,7 +18,7 @@ add_library(unordered_map
 add_library(map
         libs/map/map.cc
         libs/map/map.h
-        libs/map/s21_map_test.cc
+        libs/map/test.cc
 )
 
 add_library(hash_table

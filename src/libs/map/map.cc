@@ -2,10 +2,10 @@
 
 namespace s21 {
 template <class Key, class Value>
-s21::map<Key, Value>::map() = default;
+map<Key, Value>::map() = default;
 
 template <class Key, class Value>
-s21::map<Key, Value>::map(const s21::map<Key, Value> &other) {
+map<Key, Value>::map(const map<Key, Value> &other) {
   for (auto itr = other.begin(); itr != other.end(); ++itr) {
     insert(*itr);
   }
@@ -55,7 +55,7 @@ map<Key, Value>::~map() {
 }
 
 template <class Key, class Value>
-typename s21::map<Key, Value>::iterator s21::map<Key, Value>::begin() const {
+typename map<Key, Value>::iterator map<Key, Value>::begin() const {
   map<Key, Value>::iterator iterator;
   auto itr_node = begin_node_;
   iterator = *itr_node;
@@ -63,7 +63,7 @@ typename s21::map<Key, Value>::iterator s21::map<Key, Value>::begin() const {
 }
 
 template <class Key, class Value>
-typename s21::map<Key, Value>::iterator s21::map<Key, Value>::end() const {
+typename map<Key, Value>::iterator map<Key, Value>::end() const {
   map<Key, Value>::iterator iterator;
   auto itr_node = end_node_;
   iterator = *itr_node;
@@ -71,23 +71,23 @@ typename s21::map<Key, Value>::iterator s21::map<Key, Value>::end() const {
 }
 
 template <class Key, class Value>
-bool s21::map<Key, Value>::empty() {
+bool map<Key, Value>::empty() {
   return !size_;
 }
 
 template <class Key, class Value>
-size_t s21::map<Key, Value>::size() {
+size_t map<Key, Value>::size() {
   return size_;
 }
 
 template <class Key, class Value>
-typename s21::map<Key, Value>::size_type map<Key, Value>::max_size() {
+typename map<Key, Value>::size_type map<Key, Value>::max_size() {
   std::allocator<Key> alloc;
   return alloc.max_size();
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::clear() {
+void map<Key, Value>::clear() {
   if (root_) {
     delete_node(root_);
     size_ = 0;
@@ -96,7 +96,7 @@ void s21::map<Key, Value>::clear() {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::erase(s21::map<Key, Value>::iterator pos) {
+void map<Key, Value>::erase(map<Key, Value>::iterator pos) {
   if (pos.itr_node_ != nullptr) {
     if (pos.itr_node_ == begin_node_) {
       begin_node_ = pos.itr_node_->parent_;
@@ -126,14 +126,36 @@ void map<Key, Value>::merge(map<Key, Value> &other) {
 }
 
 template <class Key, class Value>
-bool s21::map<Key, Value>::contains(const value_type &value) {
+Value &map<Key, Value>::at(const Key &key) {
+  iterator itr_found = this->find_key(key);
+
+  if (itr_found == this->end()) {
+    throw std::out_of_range("at::no such element in the map!");
+  }
+
+  return (*itr_found).second;
+}
+
+template <class Key, class Value>
+Value &map<Key, Value>::operator[](const Key &key) {
+  iterator itr_found = this->find_key(key);
+
+  if (itr_found == this->end()) {
+    auto insert_result_pair = this->insert(std::pair<Key, Value>(key, 0));
+    return (*insert_result_pair.first).second;
+  }
+  return (*itr_found).second;
+}
+
+template <class Key, class Value>
+bool map<Key, Value>::contains(const value_type &value) {
   return find(value) != end();
 }
 
 template <class Key, class Value>
-typename s21::map<Key, Value>::iterator map<Key, Value>::find(const Key &key) {
-  s21::map<Key, Value>::iterator pos = end();
-  for (s21::map<Key, Value>::iterator itr = begin(); itr != end() && itr != pos;
+typename map<Key, Value>::iterator map<Key, Value>::find(const Key &key) {
+  map<Key, Value>::iterator pos = end();
+  for (map<Key, Value>::iterator itr = begin(); itr != end() && itr != pos;
        ++itr) {
     if (key == *itr) {
       pos = itr;
@@ -143,7 +165,28 @@ typename s21::map<Key, Value>::iterator map<Key, Value>::find(const Key &key) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::erase_black(s21::map<Key, Value>::iterator pos) {
+typename map<Key, Value>::iterator map<Key, Value>::find_key(const Key &key) {
+  auto pos = this->end_node_;
+  if (this->root_) {
+    node_ *itr = this->root_;
+    size_t i = 0;
+    while (pos == this->end_node_ && i < this->size()) {
+      if (key < itr->value_.first && itr->left_) {
+        itr = itr->left_;
+      } else if (key > itr->value_.first && itr->right_) {
+        itr = itr->right_;
+      } else if (key == itr->value_.first) {
+        pos = itr;
+      }
+      ++i;
+    }
+  }
+  auto found_pos = this->find(pos->value_);
+  return found_pos;
+}
+
+template <class Key, class Value>
+void map<Key, Value>::erase_black(map<Key, Value>::iterator pos) {
   if ((!pos.itr_node_->right_ || pos.itr_node_->right_ == end_node_) &&
       (!pos.itr_node_->left_ || pos.itr_node_->left_ == end_node_)) {
     node_ *parent = pos.itr_node_->parent_;
@@ -159,8 +202,7 @@ void s21::map<Key, Value>::erase_black(s21::map<Key, Value>::iterator pos) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::erase_black_with_one_child(
-    s21::map<Key, Value>::node_ *node) {
+void map<Key, Value>::erase_black_with_one_child(map<Key, Value>::node_ *node) {
   if (node->left_ && (!node->right_ || node->right_ == end_node_)) {
     node->value_ = node->left_->value_;
     delete node->left_;
@@ -173,8 +215,8 @@ void s21::map<Key, Value>::erase_black_with_one_child(
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::erase_black_without_children(
-    s21::map<Key, Value>::node_ *node) {
+void map<Key, Value>::erase_black_without_children(
+    map<Key, Value>::node_ *node) {
   node_ *parent = nullptr;
   node_ *brother = nullptr;
   node_ *l_nephew = nullptr;
@@ -212,10 +254,10 @@ void s21::map<Key, Value>::erase_black_without_children(
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::
+void map<Key, Value>::
     erase_black_without_children_and_black_brother_with_black_nephews(
-        s21::map<Key, Value>::node_ *node, s21::map<Key, Value>::node_ *parent,
-        s21::map<Key, Value>::node_ *brother) {
+        map<Key, Value>::node_ *node, map<Key, Value>::node_ *parent,
+        map<Key, Value>::node_ *brother) {
   brother->color_ = true;
 
   if (!node->left_ && (!node->right_ || node->right_ == end_node_)) {
@@ -233,9 +275,9 @@ void s21::map<Key, Value>::
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::erase_black_without_children_and_red_brother(
-    s21::map<Key, Value>::node_ *node, s21::map<Key, Value>::node_ *parent,
-    s21::map<Key, Value>::node_ *brother) {
+void map<Key, Value>::erase_black_without_children_and_red_brother(
+    map<Key, Value>::node_ *node, map<Key, Value>::node_ *parent,
+    map<Key, Value>::node_ *brother) {
   brother->color_ = true;
   if (!node->left_ && (!node->right_ || node->right_ == end_node_)) {
     if (parent->left_ == node) {
@@ -256,7 +298,7 @@ void s21::map<Key, Value>::erase_black_without_children_and_red_brother(
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::erase_red(s21::map<Key, Value>::iterator pos) {
+void map<Key, Value>::erase_red(map<Key, Value>::iterator pos) {
   if (!pos.itr_node_->left_ && !pos.itr_node_->right_) {
     erase_red_without_children(pos.itr_node_);
   } else if (pos.itr_node_->left_ && pos.itr_node_->right_) {
@@ -265,8 +307,7 @@ void s21::map<Key, Value>::erase_red(s21::map<Key, Value>::iterator pos) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::erase_red_without_children(
-    s21::map<Key, Value>::node_ *node) {
+void map<Key, Value>::erase_red_without_children(map<Key, Value>::node_ *node) {
   if (node->parent_ && node->parent_->left_ == node) {
     node->parent_->left_ = nullptr;
   } else if (node->parent_ && node->parent_->right_ == node) {
@@ -282,8 +323,8 @@ void s21::map<Key, Value>::erase_red_without_children(
 
 template <class Key, class Value>
 
-void s21::map<Key, Value>::erase_node_with_two_children(
-    s21::map<Key, Value>::node_ *node) {
+void map<Key, Value>::erase_node_with_two_children(
+    map<Key, Value>::node_ *node) {
   node_ *itr_node = node;
   if (itr_node->right_) {
     itr_node = itr_node->right_;
@@ -306,8 +347,8 @@ void s21::map<Key, Value>::erase_node_with_two_children(
 template <class Key, class Value>
 void map<Key, Value>::
     erase_black_without_children_and_black_brother_with_left_red_nephew(
-        s21::map<Key, Value>::node_ *node, s21::map<Key, Value>::node_ *parent,
-        s21::map<Key, Value>::node_ *brother) {
+        map<Key, Value>::node_ *node, map<Key, Value>::node_ *parent,
+        map<Key, Value>::node_ *brother) {
   std::swap(brother->color_, brother->left_->color_);
   right_turn(brother);
   erase_black_without_children_and_black_brother_with_right_red_nephew(
@@ -317,8 +358,8 @@ void map<Key, Value>::
 template <class Key, class Value>
 void map<Key, Value>::
     erase_black_without_children_and_black_brother_with_right_red_nephew(
-        s21::map<Key, Value>::node_ *node, s21::map<Key, Value>::node_ *parent,
-        s21::map<Key, Value>::node_ *brother) {
+        map<Key, Value>::node_ *node, map<Key, Value>::node_ *parent,
+        map<Key, Value>::node_ *brother) {
   brother->color_ = brother->parent_->color_;
   brother->parent_->color_ = false;
   brother->right_->color_ = false;
@@ -331,8 +372,36 @@ void map<Key, Value>::
   delete node;
 }
 
+//template <class Key, class Value>
+//std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
+//    const value_type &value) {
+//  bool inserted = map<Key, Value>::insert(value);
+//  auto pos = this->find(value);
+//  return std::pair<typename map<Key, Value>::iterator, bool>(pos, inserted);
+//}
+
 template <class Key, class Value>
-bool s21::map<Key, Value>::insert(value_type value) {
+std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
+    const Key &key, const Value &obj) {
+  return this->insert(value_type(key, obj));
+}
+
+template <class Key, class Value>
+std::pair<typename map<Key, Value>::iterator, bool>
+map<Key, Value>::insert_or_assign(const Key &key, const Value &obj) {
+  auto found = find_key(key);
+  std::pair<iterator, bool> result(found, false);
+  if (found == this->end()) {
+    result = insert(key, obj);
+  } else {
+    (*found).second = obj;
+    result.second = true;
+  }
+  return result;
+}
+
+template <class Key, class Value>
+bool map<Key, Value>::insert(value_type value) {
   int status_of_insertion = 0;
   if (!contains(value)) {
     if (!root_) {
@@ -378,7 +447,7 @@ bool s21::map<Key, Value>::insert(value_type value) {
 }
 
 template <class Key, class Value>
-typename s21::map<Key, Value>::node_ *s21::map<Key, Value>::create_node(
+typename map<Key, Value>::node_ *map<Key, Value>::create_node(
     const value_type value, bool is_red) {
   auto node = new node_;
   node->left_ = nullptr;
@@ -407,7 +476,7 @@ void map<Key, Value>::delete_node(node_ *node) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::balance_tree(map<Key, Value>::node_ *node) {
+void map<Key, Value>::balance_tree(map<Key, Value>::node_ *node) {
   balance_node(node);
   if (node->parent_) {
     balance_tree(node->parent_);
@@ -416,7 +485,7 @@ void s21::map<Key, Value>::balance_tree(map<Key, Value>::node_ *node) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::balance_node(map<Key, Value>::node_ *node) {
+void map<Key, Value>::balance_node(map<Key, Value>::node_ *node) {
   bool is_balanced = false;
   while (!is_balanced && node != end_node_) {
     is_balanced = true;
@@ -440,7 +509,7 @@ void s21::map<Key, Value>::balance_node(map<Key, Value>::node_ *node) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::right_turn(map<Key, Value>::node_ *node) {
+void map<Key, Value>::right_turn(map<Key, Value>::node_ *node) {
   node_ *top_node = node;
   node_ *bottom_node = node->left_;
   bottom_node->color_ = top_node->color_;
@@ -468,7 +537,7 @@ void s21::map<Key, Value>::right_turn(map<Key, Value>::node_ *node) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::left_turn(map<Key, Value>::node_ *node) {
+void map<Key, Value>::left_turn(map<Key, Value>::node_ *node) {
   node_ *top_node = node;
   node_ *bottom_node = node->right_;
 
@@ -497,14 +566,14 @@ void s21::map<Key, Value>::left_turn(map<Key, Value>::node_ *node) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::color_swap(map<Key, Value>::node_ *node) {
+void map<Key, Value>::color_swap(map<Key, Value>::node_ *node) {
   node->color_ = true;
   node->left_->color_ = false;
   node->right_->color_ = false;
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::update_side_nodes(node_ *node) {
+void map<Key, Value>::update_side_nodes(node_ *node) {
   if (begin_node_->value_ > node->value_) {
     begin_node_ = node;
   }
@@ -518,24 +587,22 @@ void s21::map<Key, Value>::update_side_nodes(node_ *node) {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::iterator::operator=(node_ &node_) {
+void map<Key, Value>::iterator::operator=(node_ &node_) {
   itr_node_ = &node_;
 }
 
 template <class Key, class Value>
-typename map<Key, Value>::value_type &
-s21::map<Key, Value>::iterator::operator*() {
+typename map<Key, Value>::value_type &map<Key, Value>::iterator::operator*() {
   return itr_node_->value_;
 }
 
 template <class Key, class Value>
-typename map<Key, Value>::value_type *
-s21::map<Key, Value>::iterator::operator->() {
+typename map<Key, Value>::value_type *map<Key, Value>::iterator::operator->() {
   return &(itr_node_->value_);
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::iterator::operator++() {
+void map<Key, Value>::iterator::operator++() {
   if (itr_node_ && itr_node_->right_) {
     itr_node_ = itr_node_->right_;
     while (itr_node_ && itr_node_->left_) {
@@ -552,7 +619,7 @@ void s21::map<Key, Value>::iterator::operator++() {
 }
 
 template <class Key, class Value>
-void s21::map<Key, Value>::iterator::operator--() {
+void map<Key, Value>::iterator::operator--() {
   if (itr_node_->left_) {
     itr_node_ = itr_node_->left_;
     while (itr_node_->right_) {
@@ -569,14 +636,12 @@ void s21::map<Key, Value>::iterator::operator--() {
 }
 
 template <class Key, class Value>
-bool s21::map<Key, Value>::iterator::operator!=(
-    map<Key, Value>::iterator iterator) {
+bool map<Key, Value>::iterator::operator!=(map<Key, Value>::iterator iterator) {
   return itr_node_ != iterator.itr_node_;
 }
 
 template <class Key, class Value>
-bool s21::map<Key, Value>::iterator::operator==(
-    map<Key, Value>::iterator iterator) {
+bool map<Key, Value>::iterator::operator==(map<Key, Value>::iterator iterator) {
   return itr_node_ == iterator.itr_node_;
 }
 }  // namespace s21

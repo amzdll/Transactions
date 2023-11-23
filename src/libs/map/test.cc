@@ -1,5 +1,4 @@
-#include "map/s21_map.cc"
-
+#include "map.cc"
 #include <map>
 
 #include "gtest/gtest.h"
