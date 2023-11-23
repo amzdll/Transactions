@@ -550,17 +550,13 @@ void map<Key, Value>::left_turn(map<Key, Value>::node_ *node) {
   } else if (top_node->parent_->left_ == top_node) {
     top_node->parent_->left_ = bottom_node;
   }
-
   if (bottom_node->left_) {
     bottom_node->left_->parent_ = top_node;
   }
-
   bottom_node->parent_ = top_node->parent_;
   top_node->parent_ = bottom_node;
-
   top_node->right_ = bottom_node->left_;
   bottom_node->left_ = top_node;
-
   node = bottom_node;
   node->left_ = top_node;
 }

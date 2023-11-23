@@ -206,6 +206,4 @@ typename unordered_map<Key, Value>::value_type *
 unordered_map<Key, Value>::iterator::operator->() {
   return &(*bucket_itr_);
 }
-
 }  // namespace s21
-   //

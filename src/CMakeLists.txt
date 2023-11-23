@@ -40,8 +40,8 @@ add_library(student_data
 
 add_executable(Transactions
         main.cc
-        interface/interface.cc
-        interface/interface.h
+        console_interface/interface.cc
+        console_interface/interface.h
 )
 
 target_include_directories(student_data PUBLIC ${INCLUDE_DIR})
