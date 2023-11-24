@@ -1,24 +1,9 @@
-#include "map.cc"
+#include <gtest/gtest.h>
+
 #include <map>
 
-#include "gtest/gtest.h"
+#include "map.cc"
 
-/*
- * REMOVAL TESTS:
- * 1) Red top with 0 children
- * X 2) Red top with 1 child - impossible case
- * 3) Red or black top with 2 children
- * 4) Black top with 1 child
- * 5) Black top with 0 children
- * 5.1) Brother Black
- * 5.1.1) At least one child of the brother is red
- * X 5.1.1.a) The right child is red (left -- any) is an impossible case
- * 5.1.1.b) Left child red (right -- black)
- * 5.1.2) Both brother's children are black
- * 5.2) The brother is red
- */
-// ERASE TESTS
-// 1) Красная вершина с 0 детьми
 TEST(map_erase_tests, erase_1) {
   std::map<int, int> std_a;
   s21::map<int, int> s21_a;
@@ -33,7 +18,7 @@ TEST(map_erase_tests, erase_1) {
   s21_a.insert(3, 56);
   s21_a.insert(4, 3);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(3, 56)));
+  s21_a.erase(s21_a.find(3));
   std_a.erase(std_a.find(3));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -65,7 +50,7 @@ TEST(map_erase_tests, erase_3) {
   s21_a.insert(4, 3);
   s21_a.insert(5, 8);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(2, 1)));
+  s21_a.erase(s21_a.find(2));
   std_a.erase(std_a.find(2));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -97,7 +82,7 @@ TEST(map_erase_tests, erase_3_root) {
   s21_a.insert(4, 3);
   s21_a.insert(5, 8);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(4, 3)));
+  s21_a.erase(s21_a.find(4));
   std_a.erase(std_a.find(4));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -127,7 +112,7 @@ TEST(map_erase_tests, erase_4) {
   s21_a.insert(3, 56);
   s21_a.insert(4, 3);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(4, 3)));
+  s21_a.erase(s21_a.find(4));
   std_a.erase(std_a.find(4));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -158,7 +143,7 @@ TEST(map_erase_tests, erase_5_1_1_a) {
   s21_a.insert(3, 56);
   s21_a.insert(4, 3);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(1, 1)));
+  s21_a.erase(s21_a.find(1));
   std_a.erase(std_a.find(1));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -196,7 +181,7 @@ TEST(map_erase_tests, erase_5_1_2) {
   s21_a.insert(7, 67);
   s21_a.insert(8, 7);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(2, 1)));
+  s21_a.erase(s21_a.find(2));
   std_a.erase(std_a.find(2));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -223,7 +208,7 @@ TEST(map_erase_tests, erase_5_1_2_) {
   s21_a.insert(2, 1);
   s21_a.insert(3, 56);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(1, 1)));
+  s21_a.erase(s21_a.find(1));
   std_a.erase(std_a.find(1));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -255,7 +240,7 @@ TEST(map_erase_tests, erase_5_2) {
   s21_a.insert(4, 3);
   s21_a.insert(5, 8);
 
-  s21_a.erase(s21_a.find(std::pair<int, int>(5, 8)));
+  s21_a.erase(s21_a.find(5));
   std_a.erase(std_a.find(5));
 
   EXPECT_EQ(s21_a.empty(), std_a.empty());
@@ -623,15 +608,15 @@ TEST(map_lookup_suite, contains) {
       std::pair<int, int>(3, 3), std::pair<int, int>(4, 4),
       std::pair<int, int>(5, 5)};
 
-  EXPECT_TRUE(s21_a.contains(std::pair<int, int>(1, 1)));
-  EXPECT_TRUE(s21_a.contains(std::pair<int, int>(2, 2)));
-  EXPECT_TRUE(s21_a.contains(std::pair<int, int>(3, 3)));
-  EXPECT_TRUE(s21_a.contains(std::pair<int, int>(4, 4)));
-  EXPECT_TRUE(s21_a.contains(std::pair<int, int>(5, 5)));
+  EXPECT_TRUE(s21_a.contains(1));
+  EXPECT_TRUE(s21_a.contains(2));
+  EXPECT_TRUE(s21_a.contains(3));
+  EXPECT_TRUE(s21_a.contains(4));
+  EXPECT_TRUE(s21_a.contains(5));
 
-  EXPECT_FALSE(s21_a.contains(std::pair<int, int>(0, 0)));
-  EXPECT_FALSE(s21_a.contains(std::pair<int, int>(77, 77)));
-  EXPECT_FALSE(s21_a.contains(std::pair<int, int>(123, 123)));
+  EXPECT_FALSE(s21_a.contains(0));
+  EXPECT_FALSE(s21_a.contains(77));
+  EXPECT_FALSE(s21_a.contains(123));
 }
 
 TEST(map_element_access, braces_and_at) {

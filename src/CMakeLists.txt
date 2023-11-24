@@ -1,11 +1,18 @@
-cmake_minimum_required(VERSION 3.25)
-project(Transactions)
+set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_CXX_STANDARD 17)
+cmake_minimum_required(VERSION 3.25)
+project(Transactions LANGUAGES CXX)
 
-include_directories(storages/include)
-include_directories(libs/unordered_map)
+enable_testing()
+find_package(GTest REQUIRED)
+
 include_directories(libs/map)
+include_directories(libs/unordered_map)
+include_directories(storages/include)
 include_directories(utils/student_data)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/)
 set(INCLUDE_DIR ${SRC_DIR}/include)
@@ -44,6 +51,11 @@ add_executable(Transactions
         console_interface/interface.h
 )
 
+add_executable(test_map
+        libs/map/map.cc
+        libs/map/test.cc
+)
+
 target_include_directories(student_data PUBLIC ${INCLUDE_DIR})
 
 target_include_directories(unordered_map PUBLIC ${INCLUDE_DIR})
@@ -56,3 +68,6 @@ target_include_directories(self_balancing_binary_search_tree PUBLIC ${INCLUDE_DI
 target_link_libraries(Transactions PRIVATE
         unordered_map unordered_map student_data
         hash_table self_balancing_binary_search_tree)
+
+target_link_libraries(test_map gtest pthread)
+

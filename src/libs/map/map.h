@@ -15,13 +15,11 @@ class map {
  public:
   using key_type = Key;
   using mapped_type = Value;
-  using value_type = std::pair<key_type, mapped_type>;
+  using value_type = std::pair<Key, mapped_type>;
   using reference = const value_type &;
   using const_reference = const value_type &;
   using size_type = size_t;
-
   class iterator;
-  using const_iterator = const iterator;
 
   struct node_ {
     node_ *left_;
@@ -53,17 +51,15 @@ class map {
   Value &at(const Key &key);
   Value &operator[](const Key &key);
 
-  bool contains(const value_type &value);
+  bool contains(const Key &key);
   iterator find(const Key &key);
 
-//  std::pair<iterator, bool> insert(const_reference value);
-  std::pair<iterator, bool> insert(const key_type &key, const mapped_type &obj);
-  std::pair<iterator, bool> insert_or_assign(const key_type &key,
+  std::pair<iterator, bool> insert(value_type value);
+  std::pair<iterator, bool> insert(const Key &key, const mapped_type &obj);
+  std::pair<iterator, bool> insert_or_assign(const Key &key,
                                              const mapped_type &obj);
 
  private:
-  iterator find_key(const key_type &key);
-  bool insert(value_type value);
   node_ *create_node(value_type value, bool is_red);
   void update_side_nodes(node_ *node);
   void balance_tree(map<Key, Value>::node_ *node);

@@ -127,29 +127,26 @@ void map<Key, Value>::merge(map<Key, Value> &other) {
 
 template <class Key, class Value>
 Value &map<Key, Value>::at(const Key &key) {
-  iterator itr_found = this->find_key(key);
-
-  if (itr_found == this->end()) {
+  iterator itr_found = find(key);
+  if (itr_found == end()) {
     throw std::out_of_range("at::no such element in the map!");
   }
-
   return (*itr_found).second;
 }
 
 template <class Key, class Value>
 Value &map<Key, Value>::operator[](const Key &key) {
-  iterator itr_found = this->find_key(key);
-
-  if (itr_found == this->end()) {
-    auto insert_result_pair = this->insert(std::pair<Key, Value>(key, 0));
+  iterator itr_found = find(key);
+  if (itr_found == end()) {
+    auto insert_result_pair = insert(std::pair<Key, Value>(key, 0));
     return (*insert_result_pair.first).second;
   }
   return (*itr_found).second;
 }
 
 template <class Key, class Value>
-bool map<Key, Value>::contains(const value_type &value) {
-  return find(value) != end();
+bool map<Key, Value>::contains(const Key &key) {
+  return find(key) != end();
 }
 
 template <class Key, class Value>
@@ -157,32 +154,11 @@ typename map<Key, Value>::iterator map<Key, Value>::find(const Key &key) {
   map<Key, Value>::iterator pos = end();
   for (map<Key, Value>::iterator itr = begin(); itr != end() && itr != pos;
        ++itr) {
-    if (key == *itr) {
+    if (key == itr->first) {
       pos = itr;
     }
   }
   return pos;
-}
-
-template <class Key, class Value>
-typename map<Key, Value>::iterator map<Key, Value>::find_key(const Key &key) {
-  auto pos = this->end_node_;
-  if (this->root_) {
-    node_ *itr = this->root_;
-    size_t i = 0;
-    while (pos == this->end_node_ && i < this->size()) {
-      if (key < itr->value_.first && itr->left_) {
-        itr = itr->left_;
-      } else if (key > itr->value_.first && itr->right_) {
-        itr = itr->right_;
-      } else if (key == itr->value_.first) {
-        pos = itr;
-      }
-      ++i;
-    }
-  }
-  auto found_pos = this->find(pos->value_);
-  return found_pos;
 }
 
 template <class Key, class Value>
@@ -235,7 +211,6 @@ void map<Key, Value>::erase_black_without_children(
     if (brother && brother->left_) {
       l_nephew = brother->left_;
     }
-
     if (brother && !brother->color_) {
       if (r_nephew && l_nephew && (r_nephew->color_ || l_nephew->color_)) {
         if (l_nephew->color_ && (!r_nephew->color_ || r_nephew == end_node_)) {
@@ -268,6 +243,7 @@ void map<Key, Value>::
     }
     delete node;
   }
+
   if (!parent->color_) {
     erase_black_without_children(parent);
   }
@@ -372,26 +348,18 @@ void map<Key, Value>::
   delete node;
 }
 
-//template <class Key, class Value>
-//std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
-//    const value_type &value) {
-//  bool inserted = map<Key, Value>::insert(value);
-//  auto pos = this->find(value);
-//  return std::pair<typename map<Key, Value>::iterator, bool>(pos, inserted);
-//}
-
 template <class Key, class Value>
 std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
     const Key &key, const Value &obj) {
-  return this->insert(value_type(key, obj));
+  return insert(value_type(key, obj));
 }
 
 template <class Key, class Value>
 std::pair<typename map<Key, Value>::iterator, bool>
 map<Key, Value>::insert_or_assign(const Key &key, const Value &obj) {
-  auto found = find_key(key);
+  auto found = find(key);
   std::pair<iterator, bool> result(found, false);
-  if (found == this->end()) {
+  if (found == end()) {
     result = insert(key, obj);
   } else {
     (*found).second = obj;
@@ -401,9 +369,10 @@ map<Key, Value>::insert_or_assign(const Key &key, const Value &obj) {
 }
 
 template <class Key, class Value>
-bool map<Key, Value>::insert(value_type value) {
-  int status_of_insertion = 0;
-  if (!contains(value)) {
+std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
+    value_type value) {
+  bool status_of_insertion = false;
+  if (!contains(value.first)) {
     if (!root_) {
       root_ = create_node(value, false);
       end_node_ = new node_;
@@ -416,12 +385,13 @@ bool map<Key, Value>::insert(value_type value) {
     } else {
       node_ *new_node = create_node(value, true);
       node_ *itr = root_;
+      // Emil
       while (!status_of_insertion) {
         if (value < itr->value_) {
           if (!itr->left_) {
             itr->left_ = new_node;
             new_node->parent_ = itr;
-            status_of_insertion = 1;
+            status_of_insertion = true;
             size_ += 1;
           } else {
             itr = itr->left_;
@@ -431,19 +401,20 @@ bool map<Key, Value>::insert(value_type value) {
             itr->right_ = new_node;
             new_node->parent_ = itr;
             size_ += 1;
-            status_of_insertion = 1;
+            status_of_insertion = true;
           } else {
             itr = itr->right_;
           }
         } else {
-          status_of_insertion = -1;
+          // eq values
+          break;
         }
       }
       balance_tree(new_node->parent_);
       update_side_nodes(new_node);
     }
   }
-  return status_of_insertion;
+  return {find(value.first), status_of_insertion};
 }
 
 template <class Key, class Value>
@@ -463,15 +434,12 @@ void map<Key, Value>::delete_node(node_ *node) {
   if (node == nullptr) {
     return;
   }
-
   if (node->left_ != nullptr) {
     delete_node(node->left_);
   }
-
   if (node->right_) {
     delete_node(node->right_);
   }
-
   delete node;
 }
 
@@ -550,9 +518,11 @@ void map<Key, Value>::left_turn(map<Key, Value>::node_ *node) {
   } else if (top_node->parent_->left_ == top_node) {
     top_node->parent_->left_ = bottom_node;
   }
+
   if (bottom_node->left_) {
     bottom_node->left_->parent_ = top_node;
   }
+
   bottom_node->parent_ = top_node->parent_;
   top_node->parent_ = bottom_node;
   top_node->right_ = bottom_node->left_;
@@ -641,3 +611,12 @@ bool map<Key, Value>::iterator::operator==(map<Key, Value>::iterator iterator) {
   return itr_node_ == iterator.itr_node_;
 }
 }  // namespace s21
+
+// itr = begin
+// prev_value = *itr;
+//++
+//for (itr ; itr != end() && value != *itr ;++itr)
+// if (prev_value < value < *itr) {
+//
+// status_of_insertion = true;
+// }

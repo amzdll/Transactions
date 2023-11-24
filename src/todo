@@ -1,6 +1,7 @@
-1. Reallocate buckets // Emil
-2. Handle errs in interface // Fedor
-3. Add map -> map // Emil & Fedor
-6. Test // Reshaite sami
-7. Makefile // Luchi
-9. Implement Balance Tree class // Reshaite sami
+Reallocate buckets // Emil
+Handle errs in interface // Fedor
+Add map -> map // Emil & Fedor
+Test // Reshaite sami
+Makefile // Luchi
+Implement Balance Tree class // Reshaite sami
+Implement rule of 5
