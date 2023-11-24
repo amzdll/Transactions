@@ -16,7 +16,7 @@ bool Interface::InitStorage() {
     storage_ = new HashTable();
     inited = true;
   } else if (choice == 2) {
-    inited = true;
+    storage_ = new HashTable();
   } else {
     std::cout << "Invalid input" << std::endl;
   }
@@ -122,13 +122,12 @@ void Interface::Find(const std::vector<std::string> &data) {
 }
 
 void Interface::ShowAll() {
+  int counter = 1;
   for (auto value : storage_->ShowAll()) {
-    int counter = 1;
     std::printf("%d) %s %s %s %s %s\n", counter, value.get_name().c_str(),
                 value.get_surname().c_str(), value.get_city().c_str(),
                 value.get_year().c_str(), value.get_coins().c_str());
     ++counter;
   }
 }
-
 }  // namespace s21

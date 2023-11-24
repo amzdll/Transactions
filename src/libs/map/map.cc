@@ -120,8 +120,8 @@ void map<Key, Value>::swap(map &other) {
 
 template <class Key, class Value>
 void map<Key, Value>::merge(map<Key, Value> &other) {
-  for (auto it = other.begin(); it != other.end(); ++it) {
-    insert(*it);
+  for (auto itr = other.begin(); itr != other.end(); ++itr) {
+    insert(*itr);
   }
 }
 
@@ -138,7 +138,7 @@ template <class Key, class Value>
 Value &map<Key, Value>::operator[](const Key &key) {
   iterator itr_found = find(key);
   if (itr_found == end()) {
-    auto insert_result_pair = insert(std::pair<Key, Value>(key, 0));
+    auto insert_result_pair = insert(std::pair<Key, Value>(key, {}));
     return (*insert_result_pair.first).second;
   }
   return (*itr_found).second;
@@ -387,7 +387,7 @@ std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
       node_ *itr = root_;
       // Emil
       while (!status_of_insertion) {
-        if (value < itr->value_) {
+        if (value.first < (itr->value_).first) {
           if (!itr->left_) {
             itr->left_ = new_node;
             new_node->parent_ = itr;
@@ -396,7 +396,7 @@ std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
           } else {
             itr = itr->left_;
           }
-        } else if (value > itr->value_) {
+        } else if (value.first > (itr->value_).first) {
           if (!itr->right_ || itr->right_ == end_node_) {
             itr->right_ = new_node;
             new_node->parent_ = itr;
@@ -540,10 +540,10 @@ void map<Key, Value>::color_swap(map<Key, Value>::node_ *node) {
 
 template <class Key, class Value>
 void map<Key, Value>::update_side_nodes(node_ *node) {
-  if (begin_node_->value_ > node->value_) {
+  if (begin_node_->value_.first > node->value_.first) {
     begin_node_ = node;
   }
-  if (end_node_->parent_->value_ < node->value_) {
+  if (end_node_->parent_->value_.first < node->value_.first) {
     if (end_node_->parent_->right_ == end_node_) {
       end_node_->parent_->right_ = nullptr;
     }
@@ -611,12 +611,3 @@ bool map<Key, Value>::iterator::operator==(map<Key, Value>::iterator iterator) {
   return itr_node_ == iterator.itr_node_;
 }
 }  // namespace s21
-
-// itr = begin
-// prev_value = *itr;
-//++
-//for (itr ; itr != end() && value != *itr ;++itr)
-// if (prev_value < value < *itr) {
-//
-// status_of_insertion = true;
-// }

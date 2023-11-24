@@ -1,4 +1,4 @@
-#include "interface/interface.h"
+#include "console_interface/interface.h"
 
 int main() {
   s21::Interface app;

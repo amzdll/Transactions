@@ -32,7 +32,7 @@ bool HashTable::Update(std::string key, StudentData value) {
 
 std::vector<std::string> HashTable::Keys() {
   std::vector<std::string> keys{};
-  for (const auto& itr: hash_table_) {
+  for (const auto& itr : hash_table_) {
     keys.push_back(itr.first);
   }
   return keys;
@@ -40,7 +40,7 @@ std::vector<std::string> HashTable::Keys() {
 
 std::vector<std::string> HashTable::Find(StudentData value) {
   std::vector<std::string> keys{};
-  for (const auto& itr: hash_table_) {
+  for (const auto& itr : hash_table_) {
     if (itr.second == value) {
       keys.push_back(itr.first);
     }
@@ -50,7 +50,7 @@ std::vector<std::string> HashTable::Find(StudentData value) {
 
 std::vector<StudentData> HashTable::ShowAll() {
   std::vector<StudentData> values{};
-  for (const auto& itr: hash_table_) {
+  for (const auto& itr : hash_table_) {
     values.push_back(itr.second);
   }
   return values;

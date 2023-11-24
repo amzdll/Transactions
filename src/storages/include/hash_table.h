@@ -6,7 +6,6 @@
 #include "abstract_storage.h"
 #include "unordered_map.cc"
 #include "unordered_map.h"
-#include "student_data.h"
 
 namespace s21 {
 class HashTable : public AbstractStorage {
