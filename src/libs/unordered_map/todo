@@ -10,15 +10,15 @@ complete: size_type	size_t
 
 Member functions
 test: map()
-todo: map(std::initializer_list<value_type> const &items)
-todo: map(const map &m)
-todo: map(map &&m)
+test: map(std::initializer_list<value_type> const &items)
+test: map(const map &m)
+test: map(map &&m)
 test: ~map()
-todo: operator=(map &&m)
+test: operator=(map &&m)
 
 Element access
-todo: T& at(const Key& key)
-todo: T& operator[](const Key& key)
+test: T& at(const Key& key)
+test: T& operator[](const Key& key)
 
 Iterators
 test: iterator begin()
@@ -31,11 +31,11 @@ test: size_type size()
 Modifiers
 test: void clear()
 test: std::pair<iterator, bool> insert(const value_type& value)
-refactor: iterator insert(const Key& key, const T& obj) need to replace return type
-todo: std::pair<iterator, bool> insert_or_assign(const Key& key, const T& obj)
-todo: void erase(iterator pos)
+test: iterator insert(const Key& key, const T& obj)
+need implement: std::pair<iterator, bool> insert_or_assign(const Key& key, const T& obj)
+test: void erase(iterator pos)
 test: void swap(map& other)
-todo: void merge(map& other)
+need implement: void merge(map& other)
 
 Lookup
 test: bool contains(const Key& key)
