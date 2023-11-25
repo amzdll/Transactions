@@ -13,7 +13,7 @@ test: map()
 todo: map(std::initializer_list<value_type> const &items)
 todo: map(const map &m)
 todo: map(map &&m)
-todo: ~map()
+test: ~map()
 todo: operator=(map &&m)
 
 Element access

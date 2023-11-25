@@ -1,5 +1,7 @@
-#include "interface.h"
+#include "console_interface.h"
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "NullDereference"
 namespace s21 {
 s21::Interface::Interface() {
   InitCommands();
@@ -54,14 +56,16 @@ void Interface::Run() {
   }
 }
 
-
 void Interface::Set(const std::vector<std::string> &data) {
   if (data.size() == 6) {
+    // StudentData student_data;
+    // if (!student_data.Validate((data.begin() + 1, data.end()))) {
+    // std::cout << err << std::endl;
+    // }
+    // replace if to else
     if (storage_->Set(data[0], {std::vector<std::string>(data.begin() + 1,
                                                          data.end())})) {
       std::cout << "> OK" << std::endl;
-    } else {
-      ;
     }
   }
 }
@@ -131,3 +135,5 @@ void Interface::ShowAll() {
   }
 }
 }  // namespace s21
+
+#pragma clang diagnostic pop

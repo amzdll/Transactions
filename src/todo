@@ -1,7 +1,10 @@
-Reallocate buckets // Emil
 Handle errs in interface // Fedor
-Add map -> map // Emil & Fedor
 Test // Reshaite sami
 Makefile // Luchi
-Implement Balance Tree class // Reshaite sami
-Implement rule of 5
+Refactor init storage (console interface)
+test Contructors in unordered_map
+Write operator--()
+check value in unordered_map(its need???/)
+refactor init_constructor in map (unordered_map &&other) operator=(
+un_map merge
+decompose with gpt jopu in map

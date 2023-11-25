@@ -43,6 +43,10 @@ class map {
   size_type size();
   size_type max_size();
 
+  std::pair<iterator, bool> insert(value_type value);
+  std::pair<iterator, bool> insert_or_assign(const Key &key,
+                                             const mapped_type &obj);
+  std::pair<iterator, bool> insert(const Key &key, const mapped_type &obj);
   void clear();
   void erase(s21::map<Key, Value>::iterator pos);
   void swap(map &other);
@@ -53,11 +57,6 @@ class map {
 
   bool contains(const Key &key);
   iterator find(const Key &key);
-
-  std::pair<iterator, bool> insert(value_type value);
-  std::pair<iterator, bool> insert(const Key &key, const mapped_type &obj);
-  std::pair<iterator, bool> insert_or_assign(const Key &key,
-                                             const mapped_type &obj);
 
  private:
   node_ *create_node(value_type value, bool is_red);
