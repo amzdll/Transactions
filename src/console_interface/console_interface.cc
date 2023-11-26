@@ -61,6 +61,7 @@ void Interface::Run() {
 
 void Interface::Set(const std::vector<std::string> &data) {
   if (data.size() == 6) {
+    std::string validation_result = StudentData::ValidateData(data);
     // StudentData student_data;
     // if (!student_data.Validate((data.begin() + 1, data.end()))) {
     // std::cout << err << std::endl;

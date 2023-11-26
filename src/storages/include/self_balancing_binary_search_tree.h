@@ -10,7 +10,7 @@ namespace s21 {
 class SelfBalancingBinarySearchTree : public AbstractStorage {
  public:
   SelfBalancingBinarySearchTree() = default;
-  ~SelfBalancingBinarySearchTree() = default;
+  ~SelfBalancingBinarySearchTree() override = default;
 
   bool Set(std::string key, StudentData value, size_t ex = 0) override;
   StudentData Get(std::string key) override;

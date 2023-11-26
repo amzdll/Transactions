@@ -1,5 +1,8 @@
 #include "student_data.h"
 
+#include <typeinfo>
+#include <iostream>
+
 namespace s21 {
 StudentData::StudentData()
     : name_({}), surname_({}), year_({}), city_({}), coins_({}) {}
@@ -19,14 +22,10 @@ StudentData::StudentData(const std::vector<std::string>& data) {
   }
 }
 
-std::string ValidateData(const std::vector<std::string>& data) {
-  if (!isalpha(person.lastName[0]) || !isalpha(person.firstName[0])) {
-    std::cerr << "Invalid name. Name and surname should contain only alphabetical characters." << std::endl;
-    return false;
-  }
+std::string StudentData::ValidateData(const std::vector<std::string>& data) {
+  std::cout << "Type of myInt: " << typeid(data[0]).name() << std::endl;
   return std::string();
 }
-
 
 StudentData& StudentData::operator=(const StudentData& other) {
   if (this != &other) {
@@ -46,4 +45,5 @@ bool StudentData::operator==(const StudentData& other) const {
          (city_ == other.city_ || other.city_ == "-") &&
          (coins_ == other.coins_ || other.coins_ == "-");
 }
+
 }  // namespace s21

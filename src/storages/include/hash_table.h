@@ -11,7 +11,7 @@ namespace s21 {
 class HashTable : public AbstractStorage {
  public:
   HashTable() = default;
-  ~HashTable() = default;
+  ~HashTable() override = default;
 
   bool Set(std::string key, StudentData value, size_t ex = 0) override;
   StudentData Get(std::string key) override;
