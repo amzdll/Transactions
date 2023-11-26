@@ -64,8 +64,9 @@ bool SelfBalancingBinarySearchTree::Rename(std::string old_name,
     return false;
   }
   auto iterator = llrb_tree_.find(old_name);
+  StudentData student_data = iterator->second;
   llrb_tree_.erase(iterator);
-  llrb_tree_.insert(new_name, iterator->second);
+  llrb_tree_.insert(new_name, student_data);
   return true;
 }
 }  // namespace s21

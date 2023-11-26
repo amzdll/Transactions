@@ -19,6 +19,15 @@ StudentData::StudentData(const std::vector<std::string>& data) {
   }
 }
 
+std::string ValidateData(const std::vector<std::string>& data) {
+  if (!isalpha(person.lastName[0]) || !isalpha(person.firstName[0])) {
+    std::cerr << "Invalid name. Name and surname should contain only alphabetical characters." << std::endl;
+    return false;
+  }
+  return std::string();
+}
+
+
 StudentData& StudentData::operator=(const StudentData& other) {
   if (this != &other) {
     if (other.name_ != "-") name_ = other.name_;

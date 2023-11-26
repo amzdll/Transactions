@@ -4,6 +4,7 @@
 #include <functional>
 #include <iterator>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <string>
 
@@ -25,16 +26,16 @@ class Interface {
   void Exists(const std::vector<std::string> &params);
   void Del(const std::vector<std::string> &params);
   void Update(const std::vector<std::string> &params);
-  void Keys();
   void Rename(const std::vector<std::string> &params);
   void Find(const std::vector<std::string> &params);
+  void Keys();
   void ShowAll();
 
-  AbstractStorage *storage_{};
+  std::unique_ptr<AbstractStorage> storage_;
+//  AbstractStorage *storage_{};
   std::map<std::string,
            std::function<void(Interface &, const std::vector<std::string> &)>>
       commands_;
 };
 }  // namespace s21
-
 #endif  // TRANSACTIONS_SRC_INTERFACE_INTERFACE_H_

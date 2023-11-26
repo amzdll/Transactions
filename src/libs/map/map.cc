@@ -57,8 +57,8 @@ map<Key, Value>::~map() {
 template <class Key, class Value>
 typename map<Key, Value>::iterator map<Key, Value>::begin() const {
   map<Key, Value>::iterator iterator;
-  auto itr_node = begin_node_;
-  iterator = *itr_node;
+  // Checkai epta
+  iterator = *begin_node_;
   return iterator;
 }
 
@@ -97,7 +97,18 @@ void map<Key, Value>::clear() {
 
 template <class Key, class Value>
 void map<Key, Value>::erase(map<Key, Value>::iterator pos) {
-  if (pos.itr_node_ != nullptr) {
+  if (!pos.itr_node_) {
+    return;
+  }
+
+  // leaks????
+  if (size_ == 1) {
+    delete root_;
+    delete end_node_;
+    root_ = nullptr;
+    begin_node_ = nullptr;
+    end_node_ = nullptr;
+  } else {
     if (pos.itr_node_ == begin_node_) {
       begin_node_ = pos.itr_node_->parent_;
     }
@@ -106,8 +117,8 @@ void map<Key, Value>::erase(map<Key, Value>::iterator pos) {
     } else {
       erase_black(pos);
     }
-    size_ -= 1;
   }
+  --size_;
 }
 
 template <class Key, class Value>
@@ -193,38 +204,40 @@ void map<Key, Value>::erase_black_with_one_child(map<Key, Value>::node_ *node) {
 template <class Key, class Value>
 void map<Key, Value>::erase_black_without_children(
     map<Key, Value>::node_ *node) {
+  if (node->parent_) {
+    return;
+  }
+
   node_ *parent = nullptr;
   node_ *brother = nullptr;
   node_ *l_nephew = nullptr;
   node_ *r_nephew = nullptr;
 
-  if (node->parent_) {
-    parent = node->parent_;
-    if (parent->left_ == node && parent->right_) {
-      brother = parent->right_;
-    } else if (parent->right_ == node && parent->left_) {
-      brother = parent->left_;
-    }
-    if (brother && brother->right_) {
-      r_nephew = brother->right_;
-    }
-    if (brother && brother->left_) {
-      l_nephew = brother->left_;
-    }
-    if (brother && !brother->color_) {
-      if (r_nephew && l_nephew && (r_nephew->color_ || l_nephew->color_)) {
-        if (l_nephew->color_ && (!r_nephew->color_ || r_nephew == end_node_)) {
-          erase_black_without_children_and_black_brother_with_left_red_nephew(
-              node, parent, brother);
-        }
-      } else if (((l_nephew && !l_nephew->color_) || !l_nephew) &&
-                 ((r_nephew && !r_nephew->color_) || !r_nephew)) {
-        erase_black_without_children_and_black_brother_with_black_nephews(
+  parent = node->parent_;
+  if (parent->left_ == node && parent->right_) {
+    brother = parent->right_;
+  } else if (parent->right_ == node && parent->left_) {
+    brother = parent->left_;
+  }
+  if (brother && brother->right_) {
+    r_nephew = brother->right_;
+  }
+  if (brother && brother->left_) {
+    l_nephew = brother->left_;
+  }
+  if (brother && !brother->color_) {
+    if (r_nephew && l_nephew && (r_nephew->color_ || l_nephew->color_)) {
+      if (l_nephew->color_ && (!r_nephew->color_ || r_nephew == end_node_)) {
+        erase_black_without_children_and_black_brother_with_left_red_nephew(
             node, parent, brother);
       }
-    } else if (brother && brother->color_) {
-      erase_black_without_children_and_red_brother(node, parent, brother);
+    } else if (((l_nephew && !l_nephew->color_) || !l_nephew) &&
+               ((r_nephew && !r_nephew->color_) || !r_nephew)) {
+      erase_black_without_children_and_black_brother_with_black_nephews(
+          node, parent, brother);
     }
+  } else if (brother && brother->color_) {
+    erase_black_without_children_and_red_brother(node, parent, brother);
   }
 }
 
@@ -234,7 +247,6 @@ void map<Key, Value>::
         map<Key, Value>::node_ *node, map<Key, Value>::node_ *parent,
         map<Key, Value>::node_ *brother) {
   brother->color_ = true;
-
   if (!node->left_ && (!node->right_ || node->right_ == end_node_)) {
     if (parent->left_ == node) {
       parent->left_ = nullptr;
@@ -382,6 +394,7 @@ std::pair<typename map<Key, Value>::iterator, bool> map<Key, Value>::insert(
       end_node_->parent_ = root_;
       root_->right_ = end_node_;
       size_ += 1;
+      status_of_insertion = true;
     } else {
       node_ *new_node = create_node(value, true);
       node_ *itr = root_;
@@ -446,7 +459,7 @@ void map<Key, Value>::delete_node(node_ *node) {
 template <class Key, class Value>
 void map<Key, Value>::balance_tree(map<Key, Value>::node_ *node) {
   balance_node(node);
-  if (node->parent_) {
+  if (node && node->parent_) {
     balance_tree(node->parent_);
   }
   root_->color_ = false;

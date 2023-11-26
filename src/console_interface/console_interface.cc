@@ -1,7 +1,5 @@
 #include "console_interface.h"
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "NullDereference"
 namespace s21 {
 s21::Interface::Interface() {
   InitCommands();
@@ -9,16 +7,21 @@ s21::Interface::Interface() {
 }
 
 bool Interface::InitStorage() {
+  if(storage_) {
+    return false;
+  }
+
   int choice = 0;
   bool inited = false;
   std::cout << "Choose data structure:(1 - Hash Table, 2 - Balance Tree)"
             << std::endl;
   std::cin >> choice;
   if (choice == 1) {
-    storage_ = new HashTable();
+    storage_ = std::make_unique<HashTable>();
     inited = true;
   } else if (choice == 2) {
-    storage_ = new HashTable();
+    storage_ = std::make_unique<SelfBalancingBinarySearchTree>();
+    //    storage_ = new HashTable();
   } else {
     std::cout << "Invalid input" << std::endl;
   }
@@ -135,5 +138,3 @@ void Interface::ShowAll() {
   }
 }
 }  // namespace s21
-
-#pragma clang diagnostic pop

@@ -19,6 +19,8 @@ class StudentData {
   StudentData &operator=(StudentData const &other);
   bool operator==(const StudentData &other) const;
 
+  std::string ValidateData(const std::vector<std::string>& data);
+
   std::string get_name() { return name_; };
   std::string get_surname() { return surname_; };
   std::string get_year() { return year_; };

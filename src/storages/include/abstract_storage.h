@@ -8,6 +8,8 @@
 namespace s21 {
 class AbstractStorage {
  public:
+  virtual ~AbstractStorage() = 0;
+
   virtual bool Set(std::string key, StudentData value, size_t ex = 0) = 0;
   virtual StudentData Get(std::string key) = 0;
   virtual bool Exists(std::string key) = 0;
