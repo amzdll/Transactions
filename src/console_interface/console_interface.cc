@@ -1,20 +1,21 @@
 #include "console_interface.h"
 
 namespace s21 {
+
 s21::Interface::Interface() {
   InitCommands();
   InitStorage();
 }
 
 bool Interface::InitStorage() {
-  if(storage_) {
+  if (storage_) {
     return false;
   }
 
-  int choice = 0;
   bool inited = false;
   std::cout << "Choose data structure:(1 - Hash Table, 2 - Balance Tree)"
             << std::endl;
+  int choice;
   std::cin >> choice;
   if (choice == 1) {
     storage_ = std::make_unique<HashTable>();
